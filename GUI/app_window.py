@@ -22,3 +22,22 @@ class FlashcardsWindow(QMainWindow):
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
         self.setCentralWidget(centralWidget)
+        self._createDisplay(decks, note_types)
+
+    def _createDisplay(self, decks, note_types):
+        self._createFlashcardToolbar(decks, note_types)
+
+    def _createFlashcardToolbar(self, decks, note_types):
+        layout = QHBoxLayout()
+        self.deckSelector = QComboBox()
+        self.deckSelector.addItems(decks)
+        self.noteTypeSelector = QComboBox()
+        self.noteTypeSelector.addItems(note_types)
+        self.noteCreator = QPushButton()
+        self.noteDeleter = QPushButton()
+        layout.addWidget(self.deckSelector)
+        layout.addWidget(self.noteTypeSelector)
+        layout.addWidget(self.noteCreator)
+        layout.addWidget(self.noteDeleter)
+        self.generalLayout.addLayout(layout)
+
