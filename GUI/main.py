@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication
 
 def main():
     flashcardsApp = QApplication([])
-    flashcardsWindow = FlashcardsWindow()
+    flashcardsWindow = FlashcardsWindow(decks=["1", "2"], note_types=["1", "2"])
     flashcardsWindow.show()
     exit(flashcardsApp.exec())
 
