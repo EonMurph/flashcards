@@ -26,6 +26,8 @@ class FlashcardsWindow(QMainWindow):
 
     def _createDisplay(self, decks, note_types):
         self._createFlashcardToolbar(decks, note_types)
+        self._createFlashcardEditor()
+        self._createFlashcardNavToolbar()
 
     def _createFlashcardToolbar(self, decks, note_types):
         layout = QHBoxLayout()
@@ -41,3 +43,11 @@ class FlashcardsWindow(QMainWindow):
         layout.addWidget(self.noteDeleter)
         self.generalLayout.addLayout(layout)
 
+    def _createFlashcardEditor(self):
+        pass
+
+    def _createTextToolbar(self):
+        pass
+
+    def _createFlashcardNavToolbar(self):
+        pass
