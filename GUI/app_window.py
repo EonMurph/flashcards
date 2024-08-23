@@ -47,8 +47,11 @@ class FlashcardsWindow(QMainWindow):
     def _createFlashcardEditor(self):
         layout = QVBoxLayout()
         layout.addWidget(self._createTextToolbar())
-        layout.addWidget(FlashcardEditor("Front"))
-        layout.addWidget(FlashcardEditor("Back"))
+        frontFlashcard = FlashcardEditor("Front")
+        backFlashcard = FlashcardEditor("Back")
+        self.flashcardEditors = [frontFlashcard, backFlashcard]
+        for editor in self.flashcardEditors:
+            layout.addWidget(editor)
 
         self.generalLayout.addLayout(layout)
 

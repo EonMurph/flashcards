@@ -32,6 +32,6 @@ class FlashcardEditor(QWidget):
         flashcardPreview.setFontPointSize(self.textEditor.fontPointSize())
         flashcardPreview.setReadOnly(True)
 
-        components = [previewLabel, flashcardPreview]
+        components = [previewLabel, self.flashcardPreview]
         for component in components[::[-1, 1][view == "Front"]]:
             previewLayout.addWidget(component)
