@@ -11,6 +11,13 @@ class Flashcards:
         self._connectSignalsAndSlots()
 
     def _connectSignalsAndSlots(self):
+        self.view.noteCreator.clicked.connect(
+            lambda: self.model.FlashcardOperations.createFlashcard()
+        )
+        self.view.noteDeleter.clicked.connect(
+            lambda: self.model.FlashcardOperations.deleteFlashcard()
+        )
+
         for editor in self.view.flashcardEditors:
             editor.textEditor.textChanged.connect(
                 lambda e=editor: self.model.TextOperations.renderPreview(

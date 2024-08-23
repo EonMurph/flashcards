@@ -8,3 +8,12 @@ class FlashcardsModel:
         @staticmethod
         def renderPreview(text: str, preview: QTextEdit):
             preview.setHtml(text)
+
+    class FlashcardOperations:
+        @staticmethod
+        def createFlashcard():
+            pass
+
+        @staticmethod
+        def deleteFlashcard():
+            pass
