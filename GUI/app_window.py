@@ -1,4 +1,4 @@
-from xml.etree import cElementTree
+from flashcard_editor import FlashcardEditor
 from PySide6.QtWidgets import (
     QWidget,
     QMainWindow,
@@ -46,6 +46,8 @@ class FlashcardsWindow(QMainWindow):
     def _createFlashcardEditor(self):
         layout = QVBoxLayout()
         layout.addWidget(self._createTextToolbar())
+        layout.addWidget(FlashcardEditor("Front"))
+        layout.addWidget(FlashcardEditor("Back"))
 
         self.generalLayout.addLayout(layout)
 
