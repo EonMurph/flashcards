@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 
 
 class FlashcardsWindow(QMainWindow):
+    """Window or view class for the Flashcards app."""
     def __init__(self, decks: list[str], note_types: list[str]):
         super().__init__()
         self.setWindowTitle("Flashcards")
