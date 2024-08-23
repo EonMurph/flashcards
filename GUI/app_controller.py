@@ -4,6 +4,7 @@ from app_window import FlashcardsWindow
 
 class Flashcards:
     """Controller class for the Flashcards app."""
+
     def __init__(self, view: FlashcardsWindow, model: FlashcardsModel):
         self.view = view
         self.model = model
