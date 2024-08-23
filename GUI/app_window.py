@@ -44,10 +44,30 @@ class FlashcardsWindow(QMainWindow):
         self.generalLayout.addLayout(layout)
 
     def _createFlashcardEditor(self):
-        pass
+        layout = QVBoxLayout()
+        layout.addWidget(self._createTextToolbar())
+
+        self.generalLayout.addLayout(layout)
 
     def _createTextToolbar(self):
-        pass
+        textToolbar = QToolBar()
+        # self.headingButton = QToolButton(textToolbar)
+        # self.normalTextButton = QToolButton(textToolbar)
+        self.boldButton = QToolButton(textToolbar)
+        self.italicButton = QToolButton(textToolbar)
+        self.underlineButton = QToolButton(textToolbar)
+
+        toolbarButtons = [
+            # self.headingButton,
+            # self.normalTextButton,
+            self.boldButton,
+            self.italicButton,
+            self.underlineButton,
+        ]
+        for button in toolbarButtons:
+            textToolbar.addWidget(button)
+
+        return textToolbar
 
     def _createFlashcardNavToolbar(self):
         pass
