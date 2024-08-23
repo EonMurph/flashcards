@@ -15,7 +15,6 @@ class FlashcardEditor(QWidget):
 
     def _createTextEditor(self):
         self.textEditor = QTextEdit()
-        self.textEditor.setFontPointSize(15)
         self.generalLayout.addWidget(self.textEditor)
     
     def _createFlashcardPreview(self, view: str):
@@ -24,13 +23,10 @@ class FlashcardEditor(QWidget):
         
         previewLabel = QLabel()
         previewLabel.setText(view)
-        font = previewLabel.font()
-        font.setPointSize(15)
-        previewLabel.setFont(font)
+        previewLabel.setStyleSheet("font-size: 15pt;")
         previewLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        flashcardPreview = QTextEdit()
-        flashcardPreview.setFontPointSize(self.textEditor.fontPointSize())
-        flashcardPreview.setReadOnly(True)
+        self.flashcardPreview = QTextEdit()
+        self.flashcardPreview.setReadOnly(True)
 
         components = [previewLabel, self.flashcardPreview]
         for component in components[::[-1, 1][view == "Front"]]:

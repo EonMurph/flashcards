@@ -6,19 +6,21 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QComboBox,
     QPushButton,
-    QTextEdit,
     QLabel,
     QToolBar,
     QToolButton,
+    QTextEdit
 )
 
 
 class FlashcardsWindow(QMainWindow):
     """Window or view class for the Flashcards app."""
+
     def __init__(self, decks: list[str], note_types: list[str]):
         super().__init__()
         self.setWindowTitle("Flashcards")
         self.setGeometry(50, 100, 800, 800)
+        self.setStyleSheet("QTextEdit { font-size: 13pt; }")
         self.generalLayout = QVBoxLayout()
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
