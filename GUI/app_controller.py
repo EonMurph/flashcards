@@ -5,9 +5,10 @@ from GUI.app_window import FlashcardsWindow
 class Flashcards:
     """Controller class for the Flashcards app."""
 
-    def __init__(self, view: FlashcardsWindow, model: FlashcardsModel):
+    def __init__(self, view: FlashcardsWindow, model: FlashcardsModel, data):
         self.view = view
         self.model = model
+        self.data = data
         self._connectSignalsAndSlots()
 
     def _connectSignalsAndSlots(self):
