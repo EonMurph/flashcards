@@ -1,4 +1,4 @@
-from flashcard_editor import FlashcardEditor
+from GUI.flashcard_editor import FlashcardEditor
 from PySide6.QtWidgets import (
     QWidget,
     QMainWindow,

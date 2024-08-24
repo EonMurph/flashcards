@@ -1,5 +1,5 @@
-from app_model import FlashcardsModel
-from app_window import FlashcardsWindow
+from GUI.app_model import FlashcardsModel
+from GUI.app_window import FlashcardsWindow
 
 
 class Flashcards:
