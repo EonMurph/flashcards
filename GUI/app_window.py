@@ -1,4 +1,6 @@
+from genanki import Note
 from GUI.flashcard_editor import FlashcardEditor
+from GUI.flashcard_preview import FlashcardPreview
 from PySide6.QtWidgets import (
     QWidget,
     QMainWindow,
@@ -6,17 +8,16 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QComboBox,
     QPushButton,
-    QLabel,
+    QGridLayout,
     QToolBar,
     QToolButton,
-    QTextEdit
 )
 
 
 class FlashcardsWindow(QMainWindow):
     """Window or view class for the Flashcards app."""
 
-    def __init__(self, decks: list[str], note_types: list[str]):
+    def __init__(self, decks: list[str], note_types: list[str], initialNote: Note):
         super().__init__()
         self.setWindowTitle("Flashcards")
         self.setGeometry(50, 100, 800, 800)
@@ -25,11 +26,12 @@ class FlashcardsWindow(QMainWindow):
         centralWidget = QWidget(self)
         centralWidget.setLayout(self.generalLayout)
         self.setCentralWidget(centralWidget)
-        self._createDisplay(decks, note_types)
+        self._createDisplay(decks, note_types, initialNote)
 
-    def _createDisplay(self, decks, note_types):
+    def _createDisplay(self, decks, note_types, initialNote):
         self._createFlashcardToolbar(decks, note_types)
-        self._createFlashcardEditor()
+        self.createFlashcardEditor(initialNote)
+        self._createFlashcardPreview()
         self._createFlashcardNavToolbar()
 
     def _createFlashcardToolbar(self, decks, note_types):
@@ -48,14 +50,32 @@ class FlashcardsWindow(QMainWindow):
         layout.addWidget(self.noteDeleter)
         self.generalLayout.addLayout(layout)
 
-    def _createFlashcardEditor(self):
-        layout = QVBoxLayout()
+    def createFlashcardEditor(self, note: Note):
+        self.flashcardLayout = QGridLayout()
+        maxColumns = 2
+        numFields = len(note.model.fields)
+        fields = []
+        for i in range(numFields):
+            row = i // maxColumns
+            col = i % maxColumns
+            fieldNames = note.model.fields
+            fieldNames = [fieldName["name"] for fieldName in fieldNames]
+            fieldData: str = note.fields[i]
+            fields.append(fieldData)
+            self.flashcardLayout.addWidget(
+                FlashcardEditor(row, fieldNames[i], fieldData), row, col
+            )
+        self.generalLayout.addLayout(self.flashcardLayout)
+
         #! layout.addWidget(self._createTextToolbar())
-        frontFlashcard = FlashcardEditor("Front")
-        backFlashcard = FlashcardEditor("Back")
-        self.flashcardEditors = [frontFlashcard, backFlashcard]
-        for editor in self.flashcardEditors:
-            layout.addWidget(editor)
+
+    def _createFlashcardPreview(self):
+        layout = QHBoxLayout()
+        frontFlashcard = FlashcardPreview("Front")
+        backFlashcard = FlashcardPreview("Back")
+        self.flashcardPreviews = [frontFlashcard, backFlashcard]
+        for preview in self.flashcardPreviews:
+            layout.addWidget(preview)
 
         self.generalLayout.addLayout(layout)
 

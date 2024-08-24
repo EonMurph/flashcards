@@ -1,33 +1,22 @@
-from PySide6.QtWidgets import QTextEdit, QWidget, QLabel, QVBoxLayout, QHBoxLayout
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QTextEdit, QWidget, QVBoxLayout, QLabel
 
 
 class FlashcardEditor(QWidget):
-    """Custom widget for flashcard editor UI component, containing flashcard text editor and preview."""
+    """Custom widget for the flashcard editor UI component."""
 
-    def __init__(self, view: str):
+    def __init__(self, row, fieldName: str, fieldData: str = ""):
         super().__init__()
-        self.generalLayout = QHBoxLayout()
+        self.generalLayout = QVBoxLayout()
         self.setLayout(self.generalLayout)
 
-        self._createTextEditor()
-        self._createFlashcardPreview(view)
+        self._createTextEditor(row=row, fieldName=fieldName, fieldData=fieldData)
 
-    def _createTextEditor(self):
+    def _createTextEditor(self, row, fieldName, fieldData):
+        textLabel = QLabel()
+        textLabel.setText(fieldName)
+        textLabel.setStyleSheet("font-size: 12pt;")
         self.textEditor = QTextEdit()
-        self.generalLayout.addWidget(self.textEditor)
-    
-    def _createFlashcardPreview(self, view: str):
-        previewLayout = QVBoxLayout()
-        self.generalLayout.addLayout(previewLayout)
-        
-        previewLabel = QLabel()
-        previewLabel.setText(view)
-        previewLabel.setStyleSheet("font-size: 15pt;")
-        previewLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.flashcardPreview = QTextEdit()
-        self.flashcardPreview.setReadOnly(True)
-
-        components = [previewLabel, self.flashcardPreview]
-        for component in components[::[-1, 1][view == "Front"]]:
-            previewLayout.addWidget(component)
+        self.textEditor.setText(fieldData)
+        components = [textLabel, self.textEditor]
+        for component in components[:: [-1, 1][row == 0]]:
+            self.generalLayout.addWidget(component)
