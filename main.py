@@ -2,18 +2,18 @@ from sys import exit
 from GUI import FlashcardsWindow, FlashcardsModel, Flashcards
 from PySide6.QtWidgets import QApplication
 from genanki import Note, Model, Deck
-from data import decks, FlashcardsData
+from data import decks
 
 
 def createApp() -> None:
     flashcardsApp = QApplication([])
-    flashcardsData = FlashcardsData(decks=decks)
+    flashcardsModel = FlashcardsModel(decks=decks)
     flashcardsWindow = FlashcardsWindow(
-        decks=["1", "2"],
-        initialNote=flashcardsData.currentFlashcard,
+        decks=flashcardsModel.decks,
+        initialNote=flashcardsModel.currentFlashcard,
     )
     flashcardsWindow.show()
-    Flashcards(view=flashcardsWindow, model=FlashcardsModel(), data=flashcardsData)
+    Flashcards(view=flashcardsWindow, model=flashcardsModel)
     flashcardsApp.exec()
 
 
