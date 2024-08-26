@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QTextEdit
+from GUI.flashcard_preview import FlashcardPreview
 
 
 class FlashcardsModel:
@@ -6,8 +6,15 @@ class FlashcardsModel:
 
     class TextOperations:
         @staticmethod
-        def renderPreview(text: str, preview: QTextEdit):
-            preview.setHtml(text)
+        def renderPreview(
+            fields: dict[str, str],
+            previews: list[FlashcardPreview],
+            template: dict[str, str],
+        ):
+            frontFormat = template["qfmt"].format()
+            backFormat = template["afmt"].format().replace("{FrontSide}", frontFormat)
+            previews[0].flashcardPreview.setHtml(frontFormat.format(**fields))
+            previews[1].flashcardPreview.setHtml(backFormat.format(**fields))
 
     class FlashcardOperations:
         @staticmethod

@@ -54,17 +54,16 @@ class FlashcardsWindow(QMainWindow):
         self.flashcardLayout = QGridLayout()
         maxColumns = 2
         numFields = len(note.model.fields)
-        fields = []
+        self.editors: list[FlashcardEditor] = []
         for i in range(numFields):
             row = i // maxColumns
             col = i % maxColumns
             fieldNames = note.model.fields
             fieldNames = [fieldName["name"] for fieldName in fieldNames]
             fieldData: str = note.fields[i]
-            fields.append(fieldData)
-            self.flashcardLayout.addWidget(
-                FlashcardEditor(row, fieldNames[i], fieldData), row, col
-            )
+            editor = FlashcardEditor(row, fieldNames[i], fieldData)
+            self.editors.append(editor)
+            self.flashcardLayout.addWidget(self.editors[i], row, col)
         self.generalLayout.addLayout(self.flashcardLayout)
 
         #! layout.addWidget(self._createTextToolbar())

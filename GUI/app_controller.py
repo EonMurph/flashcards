@@ -1,11 +1,16 @@
 from GUI.app_model import FlashcardsModel
 from GUI.app_window import FlashcardsWindow
+from GUI.flashcard_editor import FlashcardEditor
+from data import FlashcardsData
+from functools import partial
 
 
 class Flashcards:
     """Controller class for the Flashcards app."""
 
-    def __init__(self, view: FlashcardsWindow, model: FlashcardsModel, data):
+    def __init__(
+        self, view: FlashcardsWindow, model: FlashcardsModel, data: FlashcardsData
+    ):
         self.view = view
         self.model = model
         self.data = data
@@ -19,10 +24,28 @@ class Flashcards:
             lambda: self.model.FlashcardOperations.deleteFlashcard()
         )
 
-        for editor in self.view.flashcardEditors:
+        def getFields(editors: list[FlashcardEditor]) -> dict[str, str]:
+            editorsText: list[str] = [
+                editor.textEditor.toPlainText() for editor in editors
+            ]
+            fields = {
+                field[0]: field[1]
+                for field in zip(
+                    [
+                        field["name"]
+                        for field in self.data.currentFlashcard.model.fields
+                    ],
+                    editorsText,
+                )
+            }
+
+            return fields
+
+        for editor in self.view.editors:
             editor.textEditor.textChanged.connect(
                 lambda e=editor: self.model.TextOperations.renderPreview(
-                    text=e.textEditor.toPlainText(),
-                    preview=e.flashcardPreview,
+                    fields=getFields(editors=self.view.editors),
+                    previews=self.view.flashcardPreviews,
+                    template=self.data.currentFlashcard.model.templates[0],
                 )
             )
