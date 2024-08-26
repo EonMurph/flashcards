@@ -37,7 +37,7 @@ class Flashcards:
 
     def _setTemplateNamesItems(self) -> None:
         self.view.noteTemplateSelector.addItems(self.data.getTemplateNames())
-    
+
     def _setModelNamesItems(self) -> None:
         self.view.noteModelSelector.addItems(self.data.modelNames)
 

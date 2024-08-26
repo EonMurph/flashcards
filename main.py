@@ -10,7 +10,6 @@ def createApp() -> None:
     flashcardsData = FlashcardsData(decks=decks)
     flashcardsWindow = FlashcardsWindow(
         decks=["1", "2"],
-        note_types=["1", "2"],
         initialNote=flashcardsData.currentFlashcard,
     )
     flashcardsWindow.show()
