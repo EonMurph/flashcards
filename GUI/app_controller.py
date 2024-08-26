@@ -62,3 +62,12 @@ class Flashcards:
                     template=self.model.currentTemplate,
                 )
             )
+
+        self.view.noteTemplateSelector.currentIndexChanged.connect(
+            lambda i: self.model.setCurrentTemplate(
+                templateName=self.model.templateNames[i]
+            )
+        )
+        self.view.noteModelSelector.currentIndexChanged.connect(
+            lambda i: self.model.setCurrentModel(modelName=self.model.modelNames[i])
+        )
