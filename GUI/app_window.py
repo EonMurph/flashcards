@@ -1,4 +1,4 @@
-from genanki import Note, Deck
+from genanki import Note
 from GUI.flashcard_editor import FlashcardEditor
 from GUI.flashcard_preview import FlashcardPreview
 from PySide6.QtWidgets import (
@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 class FlashcardsWindow(QMainWindow):
     """Window or view class for the Flashcards app."""
 
-    def __init__(self, decks: dict[str, Deck], initialNote: Note) -> None:
+    def __init__(self, decks: list[str], initialNote: Note) -> None:
         super().__init__()
         self.setWindowTitle("Flashcards")
         self.setGeometry(50, 100, 800, 800)
@@ -28,16 +28,16 @@ class FlashcardsWindow(QMainWindow):
         self.setCentralWidget(centralWidget)
         self._createDisplay(decks, initialNote)
 
-    def _createDisplay(self, decks: dict[str, Deck], initialNote: Note) -> None:
+    def _createDisplay(self, decks: list[str], initialNote: Note) -> None:
         self._createFlashcardToolbar(decks)
         self.createFlashcardEditor(initialNote)
         self._createFlashcardPreview()
         self._createFlashcardNavToolbar()
 
-    def _createFlashcardToolbar(self, decks: dict[str, Deck]) -> None:
+    def _createFlashcardToolbar(self, decks: list[str]) -> None:
         layout = QHBoxLayout()
         self.deckSelector = QComboBox()
-        self.deckSelector.addItems([deck.upper() for deck in decks.keys()])
+        self.deckSelector.addItems(decks)
         self.noteModelSelector = QComboBox()
         self.noteTemplateSelector = QComboBox()
         self.noteCreator = QPushButton()
