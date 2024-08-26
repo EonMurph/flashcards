@@ -14,20 +14,21 @@ class Flashcards:
         self.view = view
         self.model = model
         self.data = data
+
+        self._previewRender = partial(
+            self.model.TextOperations.renderPreview,
+            previews=self.view.flashcardPreviews,
+        )
+
         self._onLoad()
         self._connectSignalsAndSlots()
 
-    def _getFields(self, editors: list[FlashcardEditor]) -> dict[str, str]:
-        editorsText: list[str] = [
-            editor.textEditor.toPlainText() for editor in editors
-        ]
+    def _generateFieldsArg(self, editors: list[FlashcardEditor]) -> dict[str, str]:
+        editorsText: list[str] = [editor.textEditor.toPlainText() for editor in editors]
         fields = {
             field[0]: field[1]
             for field in zip(
-                [
-                    field["name"]
-                    for field in self.data.currentFlashcard.model.fields
-                ],
+                [field["name"] for field in self.data.currentFlashcard.model.fields],
                 editorsText,
             )
         }
@@ -35,17 +36,19 @@ class Flashcards:
         return fields
 
     def _setTemplateNamesItems(self) -> None:
-        self.view.noteTemplateSelector.addItems(self.data.retrieveTemplateNames())
+        self.view.noteTemplateSelector.addItems(self.data.getTemplateNames())
+    
+    def _setModelNamesItems(self) -> None:
+        self.view.noteModelSelector.addItems(self.data.modelNames)
 
     def _onLoad(self) -> None:
         """Method to be called upon loading the window. This method will call some starter functions in `self.model` so that the loaded window will display properly."""
-        for editor in self.view.editors:
-            self.model.TextOperations.renderPreview(
-                fields=self._getFields(editors=self.view.editors),
-                previews=self.view.flashcardPreviews,
-                template=self.data.currentFlashcard.model.templates[0]
-            )
+        self._previewRender(
+            fields=self._generateFieldsArg(editors=self.view.editors),
+            template=self.data.currentFlashcard.model.templates[0],
+        )
         self._setTemplateNamesItems()
+        self._setModelNamesItems()
 
     def _connectSignalsAndSlots(self) -> None:
         self.view.noteCreator.clicked.connect(
@@ -55,12 +58,10 @@ class Flashcards:
             lambda: self.model.FlashcardOperations.deleteFlashcard()
         )
 
-
         for editor in self.view.editors:
             editor.textEditor.textChanged.connect(
-                lambda e=editor: self.model.TextOperations.renderPreview(
-                    fields=self._getFields(editors=self.view.editors),
-                    previews=self.view.flashcardPreviews,
-                    template=self.data.currentFlashcard.model.templates[0],
+                lambda: self._previewRender(
+                    fields=self._generateFieldsArg(editors=self.view.editors),
+                    template=self.data.currentTemplate,
                 )
             )
