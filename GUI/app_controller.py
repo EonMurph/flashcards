@@ -14,7 +14,7 @@ class Flashcards:
         self._previewRender = partial(
             self.model.textOperations.renderPreview,
             previews=self.view.flashcardPreviews,
-            model=self.model
+            model=self.model,
         )
 
         self._onLoad()
@@ -55,6 +55,7 @@ class Flashcards:
     def _changeModel(self, index: int) -> None:
         self.model.setCurrentModel(modelName=self.model.modelNames[index])
         self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
+        self._setTemplateNamesItems()
 
     def _onLoad(self) -> None:
         """Method to be called upon loading the window or when refreshing the UI. This method will call some starter functions in `self.model` so that the loaded window will display properly."""

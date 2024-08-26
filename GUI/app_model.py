@@ -6,17 +6,17 @@ from GUI.flashcard_preview import FlashcardPreview
 class FlashcardsModel:
     """Model class for the functionality of the Flashcards app."""
 
-    def __init__(self, decks: dict[str, Deck]) -> None:
+    def __init__(self, decks: dict[str, Deck], models: dict[str, Model]) -> None:
         self.textOperations = TextOperations()
         self.flashcardOperations = FlashcardOperations()
         self.decks = decks
+        self.models = models
         self.getDeckData()
 
     def getDeckData(self, deck: str = "cs2208") -> None:
         self.currentDeck: Deck = self.decks[deck]
         self.getFlashcardData()
-        self.models: list[Model] = list({note.model for note in self.currentDeck.notes})
-        self.modelNames: list[str] = [model.name for model in self.models]
+        self.modelNames: list[str] = [model for model in self.models]
         self.templates = self.getTemplates()
         self.templateNames = [template["name"] for template in self.templates]
 
@@ -36,8 +36,10 @@ class FlashcardsModel:
 
     def setCurrentModel(self, modelName: str) -> None:
         for model in self.models:
-            if model.name == modelName:
-                self.currentModel = model
+            if model == modelName:
+                self.currentModel = self.models[model]
+                self.templates = self.getTemplates()
+                self.templateNames = [template["name"] for template in self.templates]
                 return None
 
 
