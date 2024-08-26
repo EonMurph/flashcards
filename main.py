@@ -25,7 +25,7 @@ my_note = Note(
 )
 
 
-def createApp():
+def createApp() -> None:
     flashcardsApp = QApplication([])
     flashcardsWindow = FlashcardsWindow(
         decks=["1", "2"], note_types=["1", "2"], initialNote=my_note
@@ -37,7 +37,7 @@ def createApp():
     flashcardsApp.exec()
 
 
-def main():
+def main() -> None:
     createApp()
 
 

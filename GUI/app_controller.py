@@ -10,13 +10,17 @@ class Flashcards:
 
     def __init__(
         self, view: FlashcardsWindow, model: FlashcardsModel, data: FlashcardsData
-    ):
+    ) -> None:
         self.view = view
         self.model = model
         self.data = data
+        self._onLoad()
         self._connectSignalsAndSlots()
 
-    def _connectSignalsAndSlots(self):
+    def _onLoad(self) -> None:
+        pass
+
+    def _connectSignalsAndSlots(self) -> None:
         self.view.noteCreator.clicked.connect(
             lambda: self.model.FlashcardOperations.createFlashcard()
         )

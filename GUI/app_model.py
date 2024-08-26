@@ -10,7 +10,7 @@ class FlashcardsModel:
             fields: dict[str, str],
             previews: list[FlashcardPreview],
             template: dict[str, str],
-        ):
+        ) -> None:
             frontFormat = template["qfmt"].format()
             backFormat = template["afmt"].format().replace("{FrontSide}", frontFormat)
             previews[0].flashcardPreview.setHtml(frontFormat.format(**fields))
@@ -18,9 +18,9 @@ class FlashcardsModel:
 
     class FlashcardOperations:
         @staticmethod
-        def createFlashcard():
+        def createFlashcard() -> None:
             pass
 
         @staticmethod
-        def deleteFlashcard():
+        def deleteFlashcard() -> None:
             pass

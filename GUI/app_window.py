@@ -17,7 +17,9 @@ from PySide6.QtWidgets import (
 class FlashcardsWindow(QMainWindow):
     """Window or view class for the Flashcards app."""
 
-    def __init__(self, decks: list[str], note_types: list[str], initialNote: Note):
+    def __init__(
+        self, decks: list[str], note_types: list[str], initialNote: Note
+    ) -> None:
         super().__init__()
         self.setWindowTitle("Flashcards")
         self.setGeometry(50, 100, 800, 800)
@@ -28,13 +30,15 @@ class FlashcardsWindow(QMainWindow):
         self.setCentralWidget(centralWidget)
         self._createDisplay(decks, note_types, initialNote)
 
-    def _createDisplay(self, decks, note_types, initialNote):
+    def _createDisplay(
+        self, decks: list[str], note_types: list[str], initialNote: Note
+    ) -> None:
         self._createFlashcardToolbar(decks, note_types)
         self.createFlashcardEditor(initialNote)
         self._createFlashcardPreview()
         self._createFlashcardNavToolbar()
 
-    def _createFlashcardToolbar(self, decks, note_types):
+    def _createFlashcardToolbar(self, decks: list[str], note_types: list[str]) -> None:
         layout = QHBoxLayout()
         self.deckSelector = QComboBox()
         self.deckSelector.addItems(decks)
@@ -50,7 +54,7 @@ class FlashcardsWindow(QMainWindow):
         layout.addWidget(self.noteDeleter)
         self.generalLayout.addLayout(layout)
 
-    def createFlashcardEditor(self, note: Note):
+    def createFlashcardEditor(self, note: Note) -> None:
         self.flashcardLayout = QGridLayout()
         maxColumns = 2
         numFields = len(note.model.fields)
@@ -68,7 +72,7 @@ class FlashcardsWindow(QMainWindow):
 
         #! layout.addWidget(self._createTextToolbar())
 
-    def _createFlashcardPreview(self):
+    def _createFlashcardPreview(self) -> None:
         layout = QHBoxLayout()
         frontFlashcard = FlashcardPreview("Front")
         backFlashcard = FlashcardPreview("Back")
@@ -98,5 +102,5 @@ class FlashcardsWindow(QMainWindow):
 
     #!     return textToolbar
 
-    def _createFlashcardNavToolbar(self):
+    def _createFlashcardNavToolbar(self) -> None:
         pass

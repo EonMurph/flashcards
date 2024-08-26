@@ -4,14 +4,14 @@ from PySide6.QtWidgets import QTextEdit, QWidget, QVBoxLayout, QLabel
 class FlashcardEditor(QWidget):
     """Custom widget for the flashcard editor UI component."""
 
-    def __init__(self, row, fieldName: str, fieldData: str = ""):
+    def __init__(self, row: int, fieldName: str, fieldData: str = ""):
         super().__init__()
         self.generalLayout = QVBoxLayout()
         self.setLayout(self.generalLayout)
 
         self._createTextEditor(row=row, fieldName=fieldName, fieldData=fieldData)
 
-    def _createTextEditor(self, row, fieldName, fieldData):
+    def _createTextEditor(self, row: int, fieldName: str, fieldData: str):
         textLabel = QLabel()
         textLabel.setText(fieldName)
         textLabel.setStyleSheet("font-size: 12pt;")
