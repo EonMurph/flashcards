@@ -33,16 +33,32 @@ class Flashcards:
         return fields
 
     def _setTemplateNamesItems(self) -> None:
+        self.view.noteTemplateSelector.clear()
         self.view.noteTemplateSelector.addItems(self.model.templateNames)
 
     def _setModelNamesItems(self) -> None:
+        self.view.noteModelSelector.clear()
         self.view.noteModelSelector.addItems(self.model.modelNames)
 
+    def _refreshFlashcard(self) -> None:
+        self.view.refreshFlashcardEditor(self.model.currentFlashcard)
+
+    def _changeDeck(self, index: int) -> None:
+        self.model.getDeckData(deck=self.view.deckSelector.itemText(index).lower())
+        self._refreshFlashcard()
+        self._onLoad()
+
+    def _changeTemplate(self, index: int) -> None:
+        self.model.setCurrentTemplate(templateName=self.model.templateNames[index])
+        self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
+
+    def _changeModel(self, index: int) -> None:
+        self.model.setCurrentModel(modelName=self.model.modelNames[index])
+        self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
+
     def _onLoad(self) -> None:
-        """Method to be called upon loading the window. This method will call some starter functions in `self.model` so that the loaded window will display properly."""
-        self._previewRender(
-            fields=self._generateFieldsArg(editors=self.view.editors)
-        )
+        """Method to be called upon loading the window or when refreshing the UI. This method will call some starter functions in `self.model` so that the loaded window will display properly."""
+        self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
         self._setTemplateNamesItems()
         self._setModelNamesItems()
 
@@ -62,10 +78,11 @@ class Flashcards:
             )
 
         self.view.noteTemplateSelector.currentIndexChanged.connect(
-            lambda i: self.model.setCurrentTemplate(
-                templateName=self.model.templateNames[i]
-            )
+            lambda i: self._changeTemplate(index=i)
         )
         self.view.noteModelSelector.currentIndexChanged.connect(
-            lambda i: self.model.setCurrentModel(modelName=self.model.modelNames[i])
+            lambda i: self._changeModel(index=i)
+        )
+        self.view.deckSelector.currentIndexChanged.connect(
+            lambda i: self._changeDeck(i)
         )

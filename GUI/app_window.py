@@ -30,7 +30,7 @@ class FlashcardsWindow(QMainWindow):
 
     def _createDisplay(self, decks: dict[str, Deck], initialNote: Note) -> None:
         self._createFlashcardToolbar(decks)
-        self.createFlashcardEditor(initialNote)
+        self._createFlashcardEditor(initialNote)
         self._createFlashcardPreview()
         self._createFlashcardNavToolbar()
 
@@ -51,8 +51,17 @@ class FlashcardsWindow(QMainWindow):
         layout.addWidget(self.noteDeleter)
         self.generalLayout.addLayout(layout)
 
-    def createFlashcardEditor(self, note: Note) -> None:
-        self.flashcardLayout = QGridLayout()
+    def refreshFlashcardEditor(self, note: Note) -> None:
+        while self.flashcardLayout.count():
+            child = self.flashcardLayout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+        self._createFlashcardEditor(note, refresh=True)
+
+    def _createFlashcardEditor(self, note: Note, refresh: bool = False) -> None:
+        if not refresh:
+            self.flashcardLayout = QGridLayout()
+
         maxColumns = 2
         numFields = len(note.model.fields)
         self.editors: list[FlashcardEditor] = []
@@ -65,7 +74,9 @@ class FlashcardsWindow(QMainWindow):
             editor = FlashcardEditor(row, fieldNames[i], fieldData)
             self.editors.append(editor)
             self.flashcardLayout.addWidget(self.editors[i], row, col)
-        self.generalLayout.addLayout(self.flashcardLayout)
+
+        if not refresh:
+            self.generalLayout.addLayout(self.flashcardLayout)
 
         #! layout.addWidget(self._createTextToolbar())
 
