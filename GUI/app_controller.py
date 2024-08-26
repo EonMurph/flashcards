@@ -1,7 +1,6 @@
 from GUI.app_model import FlashcardsModel
 from GUI.app_window import FlashcardsWindow
 from GUI.flashcard_editor import FlashcardEditor
-from data import FlashcardsData
 from functools import partial
 
 
@@ -15,6 +14,7 @@ class Flashcards:
         self._previewRender = partial(
             self.model.textOperations.renderPreview,
             previews=self.view.flashcardPreviews,
+            model=self.model
         )
 
         self._onLoad()
@@ -41,8 +41,7 @@ class Flashcards:
     def _onLoad(self) -> None:
         """Method to be called upon loading the window. This method will call some starter functions in `self.model` so that the loaded window will display properly."""
         self._previewRender(
-            fields=self._generateFieldsArg(editors=self.view.editors),
-            template=self.model.currentFlashcard.model.templates[0],
+            fields=self._generateFieldsArg(editors=self.view.editors)
         )
         self._setTemplateNamesItems()
         self._setModelNamesItems()
@@ -58,8 +57,7 @@ class Flashcards:
         for editor in self.view.editors:
             editor.textEditor.textChanged.connect(
                 lambda: self._previewRender(
-                    fields=self._generateFieldsArg(editors=self.view.editors),
-                    template=self.model.currentTemplate,
+                    fields=self._generateFieldsArg(editors=self.view.editors)
                 )
             )
 
