@@ -33,6 +33,10 @@ class Flashcards:
         }
 
         return fields
+
+    def _setTemplateNamesItems(self) -> None:
+        self.view.noteTemplateSelector.addItems(self.data.retrieveTemplateNames())
+
     def _onLoad(self) -> None:
         """Method to be called upon loading the window. This method will call some starter functions in `self.model` so that the loaded window will display properly."""
         for editor in self.view.editors:
@@ -41,6 +45,7 @@ class Flashcards:
                 previews=self.view.flashcardPreviews,
                 template=self.data.currentFlashcard.model.templates[0]
             )
+        self._setTemplateNamesItems()
 
     def _connectSignalsAndSlots(self) -> None:
         self.view.noteCreator.clicked.connect(
