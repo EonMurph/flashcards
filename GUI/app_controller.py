@@ -97,7 +97,6 @@ class Flashcards:
         """
         self.model.setDeckData(deck=self.view.deckSelector.itemText(index).lower())
         self._refreshFlashcard()
-        self._onLoad()
 
     def _changeTemplate(self, index: int) -> None:
         """
@@ -114,8 +113,6 @@ class Flashcards:
         """
         self.model.setCurrentModel(modelName=self.model.modelNames[index])
         self._refreshFlashcard()
-        self._setTemplateNamesItems()
-        self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
 
     def _onLoad(self) -> None:
         """
