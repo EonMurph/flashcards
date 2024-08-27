@@ -14,17 +14,20 @@ class FlashcardsModel:
 
     def setDeckData(self, deck: str = "cs2208") -> None:
         self.currentDeck: Deck = self.decks[deck]
+        self.numFlashcards: int = len(self.currentDeck.notes)
         self.setFlashcardData()
+        self.flashcardChangesStatus: int = 0
         self.modelNames: list[str] = [model for model in self.models]
-        self.templates: list[dict[str, str]] = self.currentFlashcard.model.templates
         self.templateNames = [template["name"] for template in self.templates]
 
     def setFlashcardData(self, noteIndex: int = 0) -> None:
         self.currentFlashcard: Note = self.currentDeck.notes[noteIndex]
-        self.currentTemplate: dict[str, str] = self.currentFlashcard.model.templates[0]
+        self.currentFlashcardIndex: int = noteIndex
+        self.setTemplatesData()
 
     def setTemplatesData(self) -> None:
-        self.templates = self.currentFlashcard.model.templates
+        self.templates: list[dict[str, str]] = self.currentFlashcard.model.templates
+        self.currentTemplate: dict[str, str] = self.templates[0]
         self.templateNames = [template["name"] for template in self.templates]
 
     def setCurrentTemplate(self, templateName: str) -> None:
@@ -68,3 +71,10 @@ class FlashcardOperations:
     @staticmethod
     def deleteFlashcard() -> None:
         pass
+    
+    @staticmethod
+    def changeFlashcard(model: FlashcardsModel, indexDifference: int) -> None:
+        n = model.numFlashcards
+        currentIndex = model.currentFlashcardIndex
+        newIndex = (currentIndex + n + indexDifference) % n
+        model.setFlashcardData(noteIndex=newIndex)

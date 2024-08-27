@@ -97,4 +97,16 @@ class FlashcardsWindow(QMainWindow):
         self.generalLayout.addLayout(layout)
 
     def _createFlashcardNavToolbar(self) -> None:
-        pass
+        flashcardNavBar = QHBoxLayout()
+        self.flashcardNumDisplay = QLabel()
+        self.previousFlashcardButton = QPushButton()
+        self.previousFlashcardButton.setText("Previous")
+        self.currentFlashcardIndex = QLabel()
+        self.nextFlashcardButton = QPushButton()
+        self.nextFlashcardButton.setText("Next")
+
+        flashcardNavBar.addWidget(self.flashcardNumDisplay)
+        flashcardNavBar.addWidget(self.previousFlashcardButton)
+        flashcardNavBar.addWidget(self.currentFlashcardIndex)
+        flashcardNavBar.addWidget(self.nextFlashcardButton)
+        self.generalLayout.addLayout(flashcardNavBar)

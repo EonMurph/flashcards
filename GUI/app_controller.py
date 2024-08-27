@@ -52,12 +52,43 @@ class Flashcards:
         self.view.noteModelSelector.clear()
         self.view.noteModelSelector.addItems(self.model.modelNames)
 
+    def _setFlashcardNumDisplayText(self) -> None:
+        """
+        This method is to be called on initialisation of the controller class, or when refreshing the flashcard, whether by creation, deletion or deck changing.
+        This method is for setting the text for the QLabel displaying the number of flashcards in the deck and the changes status of the deck.
+        """
+        self.view.flashcardNumDisplay.setText(
+            f"Flashcards in deck: {self.model.numFlashcards}({'+-'[self.model.flashcardChangesStatus < 0] + str(abs(self.model.flashcardChangesStatus))})"
+        )
+
+    def _setCurrentFlashcardIndexText(self) -> None:
+        """
+        This method is to be called on initialisation of the controller class, or when either the index of the current flashcard changed or the number of flashcards in the deck changed.
+        This method is for setting the text for the QLabel displaying the current flashcard's index out of the total number of flashcards in the deck.
+        """
+        self.view.currentFlashcardIndex.setText(
+            f"{self.model.currentFlashcardIndex + 1}/{self.model.numFlashcards}"
+        )
+
+    def _changeFlashcard(self, indexDifference: int) -> None:
+        """
+        This method is to be called when changing which flashcard is being viewed.
+        This method is for calling the model.changeFlashcard method and then refreshing the flashcard related UI.
+        """
+        self.model.flashcardOperations.changeFlashcard(
+            model=self.model, indexDifference=indexDifference
+        )
+        self._refreshFlashcard()
+
     def _refreshFlashcard(self) -> None:
         """
         This method is to be called when changing flashcard data.
         This method refreshes the flashcard related UI.
         """
         self.view.refreshFlashcardEditor(self.model.currentFlashcard)
+        self._setTemplateNamesItems()
+        self._setCurrentFlashcardIndexText()
+        self._renderPreview(fields=self._generateFieldsArg(editors=self.view.editors))
 
     def _changeDeck(self, index: int) -> None:
         """
@@ -93,6 +124,8 @@ class Flashcards:
         """
         self._refreshFlashcard()
         self._setModelNamesItems()
+        self._setFlashcardNumDisplayText()
+        self._setCurrentFlashcardIndexText()
 
     def _connectSignalsAndSlots(self) -> None:
         """
@@ -121,4 +154,11 @@ class Flashcards:
         )
         self.view.deckSelector.currentIndexChanged.connect(
             lambda i: self._changeDeck(i)
+        )
+
+        self.view.previousFlashcardButton.clicked.connect(
+            lambda: self._changeFlashcard(indexDifference=-1)
+        )
+        self.view.nextFlashcardButton.clicked.connect(
+            lambda: self._changeFlashcard(indexDifference=1)
         )
