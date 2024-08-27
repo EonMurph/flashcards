@@ -9,6 +9,8 @@ from PySide6.QtWidgets import (
     QComboBox,
     QPushButton,
     QGridLayout,
+    QLabel,
+    QFrame,
 )
 
 
@@ -27,9 +29,17 @@ class FlashcardsWindow(QMainWindow):
         self._createDisplay(decks, initialNote)
 
     def _createDisplay(self, decks: dict[str, Deck], initialNote: Note) -> None:
+        class QHLine(QFrame):
+            def __init__(self) -> None:
+                super(QHLine, self).__init__()
+                self.setFrameShape(QFrame.HLine)
+
         self._createFlashcardToolbar(decks)
+        self.generalLayout.addWidget(QHLine())
         self._createFlashcardEditor(initialNote)
+        self.generalLayout.addWidget(QHLine())
         self._createFlashcardPreview()
+        self.generalLayout.addWidget(QHLine())
         self._createFlashcardNavToolbar()
 
     def _createFlashcardToolbar(self, decks: dict[str, Deck]) -> None:
