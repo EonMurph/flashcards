@@ -32,7 +32,7 @@ class FlashcardsWindow(QMainWindow):
         class QHLine(QFrame):
             def __init__(self) -> None:
                 super(QHLine, self).__init__()
-                self.setFrameShape(QFrame.HLine)
+                self.setFrameShape(QFrame.HLine) # type: ignore
 
         self._createFlashcardToolbar(decks)
         self.generalLayout.addWidget(QHLine())
