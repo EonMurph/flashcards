@@ -1,4 +1,3 @@
-from turtle import mode
 from genanki import Deck, Note, Model
 from GUI.flashcard_preview import FlashcardPreview
 

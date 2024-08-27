@@ -9,8 +9,6 @@ from PySide6.QtWidgets import (
     QComboBox,
     QPushButton,
     QGridLayout,
-    QToolBar,
-    QToolButton,
 )
 
 
@@ -78,8 +76,6 @@ class FlashcardsWindow(QMainWindow):
         if not refresh:
             self.generalLayout.addLayout(self.flashcardLayout)
 
-        #! layout.addWidget(self._createTextToolbar())
-
     def _createFlashcardPreview(self) -> None:
         layout = QHBoxLayout()
         frontFlashcard = FlashcardPreview("Front")
@@ -89,26 +85,6 @@ class FlashcardsWindow(QMainWindow):
             layout.addWidget(preview)
 
         self.generalLayout.addLayout(layout)
-
-    #! def _createTextToolbar(self):
-    #!     textToolbar = QToolBar()
-    #!     # self.headingButton = QToolButton(textToolbar)
-    #!     # self.normalTextButton = QToolButton(textToolbar)
-    #!     self.boldButton = QToolButton(textToolbar)
-    #!     self.italicButton = QToolButton(textToolbar)
-    #!     self.underlineButton = QToolButton(textToolbar)
-
-    #!     toolbarButtons = [
-    #!         # self.headingButton,
-    #!         # self.normalTextButton,
-    #!         self.boldButton,
-    #!         self.italicButton,
-    #!         self.underlineButton,
-    #!     ]
-    #!     for button in toolbarButtons:
-    #!         textToolbar.addWidget(button)
-
-    #!     return textToolbar
 
     def _createFlashcardNavToolbar(self) -> None:
         pass
