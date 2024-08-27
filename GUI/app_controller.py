@@ -14,7 +14,6 @@ class Flashcards:
         self._renderPreview = partial(
             self.model.textOperations.renderPreview,
             previews=self.view.flashcardPreviews,
-            model=self.model,
         )
 
         self._onLoad()
@@ -69,16 +68,6 @@ class Flashcards:
         self.view.currentFlashcardIndex.setText(
             f"{self.model.currentFlashcardIndex + 1}/{self.model.numFlashcards}"
         )
-
-    def _changeFlashcard(self, indexDifference: int) -> None:
-        """
-        This method is to be called when changing which flashcard is being viewed.
-        This method is for calling the model.changeFlashcard method and then refreshing the flashcard related UI.
-        """
-        self.model.flashcardOperations.changeFlashcard(
-            model=self.model, indexDifference=indexDifference
-        )
-        self._refreshFlashcard()
 
     def _refreshFlashcard(self) -> None:
         """
