@@ -1,6 +1,7 @@
 from genanki import Note, Deck
 from GUI.flashcard_editor import FlashcardEditor
 from GUI.flashcard_preview import FlashcardPreview
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget,
     QMainWindow,
@@ -102,6 +103,8 @@ class FlashcardsWindow(QMainWindow):
         self.previousFlashcardButton = QPushButton()
         self.previousFlashcardButton.setText("Previous")
         self.currentFlashcardIndex = QLabel()
+        self.currentFlashcardIndex.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.currentFlashcardIndex.setMaximumWidth(40)
         self.nextFlashcardButton = QPushButton()
         self.nextFlashcardButton.setText("Next")
 
