@@ -98,6 +98,16 @@ class Flashcards:
         self.model.setDeckData(deck=self.view.deckSelector.itemText(index).lower())
         self._refreshFlashcard()
 
+    def _changeFlashcard(self, indexDifference: int) -> None:
+        """
+        This method is to be called when changing which flashcard is being viewed.
+        This method is for calling the model.changeFlashcard method and then refreshing the flashcard related UI.
+        """
+        self.model.flashcardOperations.changeFlashcard(indexDifference=indexDifference)
+        self._changeModel(index=self.model.modelNames.index(self.model.currentFlashcard.model.name))
+        self.view.noteModelSelector.setCurrentIndex(self.view.noteModelSelector.findText(self.model.currentFlashcard.model.name))
+        self._refreshFlashcard()
+
     def _changeTemplate(self, index: int) -> None:
         """
         This method is to be connected to the indexChanged signal of the templates QComboBox.
