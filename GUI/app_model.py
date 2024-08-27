@@ -13,14 +13,14 @@ class FlashcardsModel:
         self.modelNames: list[str] = [model for model in self.models]
         self.setDeckData()
 
-    def setDeckData(self, deck: str = "cs2208") -> None:
+    def setDeckData(self, deck: str = "cs2208", flashcardIndex: int = 0) -> None:
         """
         This method is to be called on a deck change.
         This method sets all the deck related data and calls methods for setting flashcard data.
         """
         self.currentDeck: Deck = self.decks[deck]
         self.numFlashcards: int = len(self.currentDeck.notes)
-        self.setFlashcardData()
+        self.setFlashcardData(flashcardIndex)
         self.flashcardChangesStatus: int = 0
         self.templateNames = [template["name"] for template in self.templates]
 

@@ -1,3 +1,4 @@
+from genanki import Note
 from GUI.app_model import FlashcardsModel
 from GUI.app_window import FlashcardsWindow
 from GUI.flashcard_editor import FlashcardEditor
@@ -77,6 +78,7 @@ class Flashcards:
         self.view.refreshFlashcardEditor(self.model.currentFlashcard)
         self._setTemplateNamesItems()
         self._setCurrentFlashcardIndexText()
+        self.view.flashcardModelSelector.setCurrentIndex(self.view.flashcardModelSelector.findText(self.model.currentFlashcard.model.name))
         self._renderPreview(fields=self._generateFieldsArg(editors=self.view.editors))
 
     def _onManipulatingDeck(self) -> None:
@@ -97,8 +99,14 @@ class Flashcards:
         This method is for calling the model.changeFlashcard method and then refreshing the flashcard related UI.
         """
         self.model.flashcardOperations.changeFlashcard(indexDifference=indexDifference)
-        self._changeModel(index=self.model.modelNames.index(self.model.currentFlashcard.model.name))
-        self.view.flashcardModelSelector.setCurrentIndex(self.view.flashcardModelSelector.findText(self.model.currentFlashcard.model.name))
+        self._changeModel(
+            index=self.model.modelNames.index(self.model.currentFlashcard.model.name)
+        )
+        self.view.flashcardModelSelector.setCurrentIndex(
+            self.view.flashcardModelSelector.findText(
+                self.model.currentFlashcard.model.name
+            )
+        )
         self._refreshFlashcard()
 
     def _changeTemplate(self, index: int) -> None:
