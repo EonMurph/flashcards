@@ -14,6 +14,10 @@ class FlashcardsModel:
         self.setDeckData()
 
     def setDeckData(self, deck: str = "cs2208") -> None:
+        """
+        This method is to be called on a deck change.
+        This method sets all the deck related data and calls methods for setting flashcard data.
+        """
         self.currentDeck: Deck = self.decks[deck]
         self.numFlashcards: int = len(self.currentDeck.notes)
         self.setFlashcardData()
@@ -21,23 +25,38 @@ class FlashcardsModel:
         self.templateNames = [template["name"] for template in self.templates]
 
     def setFlashcardData(self, noteIndex: int = 0) -> None:
+        """
+        This method is to be called on either a deck change or a flashcard change.
+        This method sets all flashcard related data and called methods for setting the current model.
+        """
         self.currentFlashcard: Note = self.currentDeck.notes[noteIndex]
         self.currentFlashcardIndex: int = noteIndex
         self.setTemplatesData()
         self.setCurrentModel
 
     def setTemplatesData(self) -> None:
+        """
+        This method is to be called on a model change.
+        This method sets all the template related data.
+        """
         self.templates: list[dict[str, str]] = self.currentFlashcard.model.templates
         self.currentTemplate: dict[str, str] = self.templates[0]
         self.templateNames = [template["name"] for template in self.templates]
 
     def setCurrentTemplate(self, templateName: str) -> None:
+        """
+        This method is to be connected to the template QComboBox's indexChanged signal.
+        This method sets the current template for the renderPreview method.
+        """
         for template in self.templates:
             if template["name"] == templateName:
                 self.currentTemplate = template
                 return None
 
-    def setCurrentModel(self, modelArg: str|Model) -> None:
+    def setCurrentModel(self, modelArg: str | Model) -> None:
+        """
+        This method is to be called up a change a flashcard or to be connected to the model QComboBox's indexChanged signal.
+        """
         for model in self.models:
             if modelArg in [model, self.models[model]]:
                 self.currentFlashcard.model = self.models[model]
