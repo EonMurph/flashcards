@@ -31,8 +31,7 @@ class FlashcardsModel:
         """
         self.currentFlashcard: Note = self.currentDeck.notes[noteIndex]
         self.currentFlashcardIndex: int = noteIndex
-        self.setTemplatesData()
-        self.setCurrentModel
+        self.setCurrentModel(self.currentFlashcard.model)
 
     def setTemplatesData(self) -> None:
         """
