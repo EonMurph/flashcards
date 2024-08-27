@@ -10,22 +10,22 @@ class FlashcardsModel:
         self.flashcardOperations = FlashcardOperations()
         self.decks = decks
         self.models = models
-        self.getDeckData()
+        self.setDeckData()
 
-    def getDeckData(self, deck: str = "cs2208") -> None:
+    def setDeckData(self, deck: str = "cs2208") -> None:
         self.currentDeck: Deck = self.decks[deck]
-        self.getFlashcardData()
+        self.setFlashcardData()
         self.modelNames: list[str] = [model for model in self.models]
-        self.templates = self.getTemplates()
+        self.templates: list[dict[str, str]] = self.currentFlashcard.model.templates
         self.templateNames = [template["name"] for template in self.templates]
 
-    def getFlashcardData(self, noteIndex: int = 0) -> None:
+    def setFlashcardData(self, noteIndex: int = 0) -> None:
         self.currentFlashcard: Note = self.currentDeck.notes[noteIndex]
-        self.currentModel: Model = self.currentFlashcard.model
-        self.currentTemplate: dict[str, str] = self.currentModel.templates[0]
+        self.currentTemplate: dict[str, str] = self.currentFlashcard.model.templates[0]
 
-    def getTemplates(self) -> list[dict[str, str]]:
-        return [template for template in self.currentModel.templates]
+    def setTemplatesData(self) -> None:
+        self.templates = self.currentFlashcard.model.templates
+        self.templateNames = [template["name"] for template in self.templates]
 
     def setCurrentTemplate(self, templateName: str) -> None:
         for template in self.templates:
@@ -36,9 +36,8 @@ class FlashcardsModel:
     def setCurrentModel(self, modelName: str) -> None:
         for model in self.models:
             if model == modelName:
-                self.currentModel = self.models[model]
-                self.templates = self.getTemplates()
-                self.templateNames = [template["name"] for template in self.templates]
+                self.currentFlashcard.model = self.models[model]
+                self.setTemplatesData()
                 return None
 
 

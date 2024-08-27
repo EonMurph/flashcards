@@ -44,7 +44,7 @@ class Flashcards:
         self.view.refreshFlashcardEditor(self.model.currentFlashcard)
 
     def _changeDeck(self, index: int) -> None:
-        self.model.getDeckData(deck=self.view.deckSelector.itemText(index).lower())
+        self.model.setDeckData(deck=self.view.deckSelector.itemText(index).lower())
         self._refreshFlashcard()
         self._onLoad()
 
@@ -54,8 +54,9 @@ class Flashcards:
 
     def _changeModel(self, index: int) -> None:
         self.model.setCurrentModel(modelName=self.model.modelNames[index])
-        self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
+        self._refreshFlashcard()
         self._setTemplateNamesItems()
+        self._previewRender(fields=self._generateFieldsArg(editors=self.view.editors))
 
     def _onLoad(self) -> None:
         """Method to be called upon loading the window or when refreshing the UI. This method will call some starter functions in `self.model` so that the loaded window will display properly."""
