@@ -24,13 +24,14 @@ class FlashcardsModel:
         self.flashcardChangesStatus: int = 0
         self.templateNames = [template["name"] for template in self.templates]
 
-    def setFlashcardData(self, noteIndex: int = 0) -> None:
+    def setFlashcardData(self, flashcardIndex: int = 0) -> None:
         """
         This method is to be called on either a deck change or a flashcard change.
         This method sets all flashcard related data and called methods for setting the current model.
         """
-        self.currentFlashcard: Note = self.currentDeck.notes[noteIndex]
-        self.currentFlashcardIndex: int = noteIndex
+        if self.numFlashcards <= flashcardIndex: flashcardIndex = 0
+        self.currentFlashcard: Note = self.currentDeck.notes[flashcardIndex]
+        self.currentFlashcardIndex: int = flashcardIndex
         self.setCurrentModel(self.currentFlashcard.model)
 
     def setTemplatesData(self) -> None:
@@ -88,16 +89,21 @@ class FlashcardOperations:
     def __init__(self, model: FlashcardsModel) -> None:
         self.model = model
 
-    @staticmethod
-    def createFlashcard() -> None:
-        pass
+    def createFlashcard(self) -> None:
+        defaultModel = self.model.models["Default Model"]
+        self.model.currentDeck.add_note(Note(model=defaultModel, fields=["", ""]))
+        self.model.numFlashcards += 1
+        self.model.flashcardChangesStatus += 1
+        self.model.setFlashcardData(self.model.numFlashcards - 1)
 
-    @staticmethod
-    def deleteFlashcard() -> None:
-        pass
+    def deleteFlashcard(self, flashcard: Note) -> None:
+        self.model.currentDeck.notes.remove(flashcard)
+        self.model.numFlashcards -= 1
+        self.model.flashcardChangesStatus -= 1
+        self.model.setFlashcardData(self.model.currentFlashcardIndex)
 
     def changeFlashcard(self, indexDifference: int) -> None:
         n = self.model.numFlashcards
         currentIndex = self.model.currentFlashcardIndex
         newIndex = (currentIndex + n + indexDifference) % n
-        self.model.setFlashcardData(noteIndex=newIndex)
+        self.model.setFlashcardData(flashcardIndex=newIndex)

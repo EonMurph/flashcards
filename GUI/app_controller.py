@@ -79,6 +79,10 @@ class Flashcards:
         self._setCurrentFlashcardIndexText()
         self._renderPreview(fields=self._generateFieldsArg(editors=self.view.editors))
 
+    def _onManipulatingDeck(self) -> None:
+        self._setFlashcardNumDisplayText()
+        self._refreshFlashcard()
+
     def _changeDeck(self, index: int) -> None:
         """
         This method is to be called when changing the deck.
@@ -113,6 +117,14 @@ class Flashcards:
         self.model.setCurrentModel(modelArg=self.model.modelNames[index])
         self._refreshFlashcard()
 
+    def _createFlashcard(self) -> None:
+        self.model.flashcardOperations.createFlashcard()
+        self._onManipulatingDeck()
+
+    def _deleteFlashcard(self, flashcard: Note) -> None:
+        self.model.flashcardOperations.deleteFlashcard(flashcard=flashcard)
+        self._onManipulatingDeck()
+
     def _onLoad(self) -> None:
         """
         This method is to only be called upon initialisation of the controller class.
@@ -128,11 +140,9 @@ class Flashcards:
         This method is to only be called upon initialisation of the controller class.
         This method connected any signals to their correct slot.
         """
-        self.view.flashcardCreator.clicked.connect(
-            lambda: self.model.flashcardOperations.createFlashcard()
-        )
+        self.view.flashcardCreator.clicked.connect(lambda: self._createFlashcard())
         self.view.flashcardDeleter.clicked.connect(
-            lambda: self.model.flashcardOperations.deleteFlashcard()
+            lambda: self._deleteFlashcard(self.model.currentFlashcard)
         )
 
         for editor in self.view.editors:
