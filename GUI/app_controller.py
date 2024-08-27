@@ -138,10 +138,10 @@ class Flashcards:
         This method is to only be called upon initialisation of the controller class.
         This method will call some starter functions in `self.model` so that the loaded window will display properly.
         """
-        self._refreshFlashcard()
         self._setModelNamesItems()
         self._setFlashcardNumDisplayText()
         self._setCurrentFlashcardIndexText()
+        self._refreshFlashcard()
 
     def _connectSignalsAndSlots(self) -> None:
         """
