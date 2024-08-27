@@ -10,6 +10,7 @@ class FlashcardsModel:
         self.flashcardOperations = FlashcardOperations(self)
         self.decks = decks
         self.models = models
+        self.modelNames: list[str] = [model for model in self.models]
         self.setDeckData()
 
     def setDeckData(self, deck: str = "cs2208") -> None:
@@ -17,13 +18,13 @@ class FlashcardsModel:
         self.numFlashcards: int = len(self.currentDeck.notes)
         self.setFlashcardData()
         self.flashcardChangesStatus: int = 0
-        self.modelNames: list[str] = [model for model in self.models]
         self.templateNames = [template["name"] for template in self.templates]
 
     def setFlashcardData(self, noteIndex: int = 0) -> None:
         self.currentFlashcard: Note = self.currentDeck.notes[noteIndex]
         self.currentFlashcardIndex: int = noteIndex
         self.setTemplatesData()
+        self.setCurrentModel
 
     def setTemplatesData(self) -> None:
         self.templates: list[dict[str, str]] = self.currentFlashcard.model.templates
@@ -36,9 +37,9 @@ class FlashcardsModel:
                 self.currentTemplate = template
                 return None
 
-    def setCurrentModel(self, modelName: str) -> None:
+    def setCurrentModel(self, modelArg: str|Model) -> None:
         for model in self.models:
-            if model == modelName:
+            if modelArg in [model, self.models[model]]:
                 self.currentFlashcard.model = self.models[model]
                 self.setTemplatesData()
                 return None

@@ -111,7 +111,7 @@ class Flashcards:
         This method is to be connected to the indexChanged signal of the model QComboBox.
         This method is for changing the current model of a flashcard.
         """
-        self.model.setCurrentModel(modelName=self.model.modelNames[index])
+        self.model.setCurrentModel(modelArg=self.model.modelNames[index])
         self._refreshFlashcard()
 
     def _onLoad(self) -> None:
