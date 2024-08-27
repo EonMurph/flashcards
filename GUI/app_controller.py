@@ -41,16 +41,16 @@ class Flashcards:
         This method is to be called when the model for a flashcard has been changed.
         Method for setting the template QComboBox selectors items.
         """
-        self.view.noteTemplateSelector.clear()
-        self.view.noteTemplateSelector.addItems(self.model.templateNames)
+        self.view.flashcardTemplateSelector.clear()
+        self.view.flashcardTemplateSelector.addItems(self.model.templateNames)
 
     def _setModelNamesItems(self) -> None:
         """
         This method is to be called once on initialisation of the controller class.
         This method is for setting the model QComboBox selectors items.
         """
-        self.view.noteModelSelector.clear()
-        self.view.noteModelSelector.addItems(self.model.modelNames)
+        self.view.flashcardModelSelector.clear()
+        self.view.flashcardModelSelector.addItems(self.model.modelNames)
 
     def _setFlashcardNumDisplayText(self) -> None:
         """
@@ -105,7 +105,7 @@ class Flashcards:
         """
         self.model.flashcardOperations.changeFlashcard(indexDifference=indexDifference)
         self._changeModel(index=self.model.modelNames.index(self.model.currentFlashcard.model.name))
-        self.view.noteModelSelector.setCurrentIndex(self.view.noteModelSelector.findText(self.model.currentFlashcard.model.name))
+        self.view.flashcardModelSelector.setCurrentIndex(self.view.flashcardModelSelector.findText(self.model.currentFlashcard.model.name))
         self._refreshFlashcard()
 
     def _changeTemplate(self, index: int) -> None:
@@ -139,10 +139,10 @@ class Flashcards:
         This method is to only be called upon initialisation of the controller class.
         This method connected any signals to their correct slot.
         """
-        self.view.noteCreator.clicked.connect(
+        self.view.flashcardCreator.clicked.connect(
             lambda: self.model.flashcardOperations.createFlashcard()
         )
-        self.view.noteDeleter.clicked.connect(
+        self.view.flashcardDeleter.clicked.connect(
             lambda: self.model.flashcardOperations.deleteFlashcard()
         )
 
@@ -153,10 +153,10 @@ class Flashcards:
                 )
             )
 
-        self.view.noteTemplateSelector.currentIndexChanged.connect(
+        self.view.flashcardTemplateSelector.currentIndexChanged.connect(
             lambda i: self._changeTemplate(index=i)
         )
-        self.view.noteModelSelector.currentIndexChanged.connect(
+        self.view.flashcardModelSelector.currentIndexChanged.connect(
             lambda i: self._changeModel(index=i)
         )
         self.view.deckSelector.currentIndexChanged.connect(
