@@ -90,12 +90,14 @@ class FlashcardsWindow(QMainWindow):
         maxColumns = 2
         numFields = len(note.model.fields)
         self.editors: list[FlashcardEditor] = []
+        fieldNames: list[str] = [fieldName["name"] for fieldName in note.model.fields]
         for i in range(numFields):
             row = i // maxColumns
             col = i % maxColumns
-            fieldNames = note.model.fields
-            fieldNames = [fieldName["name"] for fieldName in fieldNames]
-            fieldData: str = note.fields[i]
+            try:
+                fieldData: str = note.fields[i]
+            except IndexError:
+                fieldData = ""
             editor = FlashcardEditor(row, fieldNames[i], fieldData)
             self.editors.append(editor)
             self.flashcardLayout.addWidget(self.editors[i], row, col)
