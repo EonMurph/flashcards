@@ -78,8 +78,12 @@ class Flashcards:
         self.view.refreshFlashcardEditor(self.model.currentFlashcard)
         self._setTemplateNamesItems()
         self._setCurrentFlashcardIndexText()
-        self.view.flashcardModelSelector.setCurrentIndex(self.view.flashcardModelSelector.findText(self.model.currentFlashcard.model.name))
-        self._renderPreview(fields=self._generateFieldsArg(editors=self.view.editors))
+        self.view.flashcardModelSelector.setCurrentIndex(
+            self.view.flashcardModelSelector.findText(
+                self.model.currentFlashcard.model.name
+            )
+        )
+        self._renderPreview(fields=self._generateFields(editors=self.view.editors))
 
     def _onManipulatingDeck(self) -> None:
         self._setFlashcardNumDisplayText()

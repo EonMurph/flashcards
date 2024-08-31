@@ -29,7 +29,8 @@ class FlashcardsModel:
         This method is to be called on either a deck change or a flashcard change.
         This method sets all flashcard related data and called methods for setting the current model.
         """
-        if self.numFlashcards <= flashcardIndex: flashcardIndex = 0
+        if self.numFlashcards <= flashcardIndex:
+            flashcardIndex = 0
         self.currentFlashcard: Note = self.currentDeck.notes[flashcardIndex]
         self.currentFlashcardIndex: int = flashcardIndex
         self.setCurrentModel(self.currentFlashcard.model)
