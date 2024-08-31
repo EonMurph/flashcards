@@ -1,3 +1,4 @@
+from typing import Callable
 from genanki import Note, Deck
 from GUI.flashcard_editor import FlashcardEditor
 from GUI.flashcard_preview import FlashcardPreview
@@ -40,8 +41,7 @@ class FlashcardsWindow(QMainWindow):
                 self.dirty = True
 
             def refresh(self) -> None:
-                print(self.dirty)
-                self.dirty = False
+                print("Refresh not yet implemented")
 
         return RefreshableWidget
 
@@ -61,10 +61,10 @@ class FlashcardsWindow(QMainWindow):
 
     def _createFlashcardToolbar(self, decks: dict[str, Deck]) -> None:
         layout = QHBoxLayout()
-        self.deckSelector = QComboBox()
+        self.deckSelector = self._withRefresh(QComboBox)()
         self.deckSelector.addItems([deck.upper() for deck in decks])
-        self.flashcardModelSelector = QComboBox()
-        self.flashcardTemplateSelector = QComboBox()
+        self.flashcardModelSelector = self._withRefresh(QComboBox)()
+        self.flashcardTemplateSelector = self._withRefresh(QComboBox)()
         self.flashcardCreator = QPushButton()
         self.flashcardCreator.setText("&Create")
         self.flashcardDeleter = QPushButton()
@@ -98,7 +98,7 @@ class FlashcardsWindow(QMainWindow):
                 fieldData: str = note.fields[i]
             except IndexError:
                 fieldData = ""
-            editor = FlashcardEditor(row, fieldNames[i], fieldData)
+            editor = self._withRefresh(FlashcardEditor)(row, fieldNames[i], fieldData)
             self.editors.append(editor)
             self.flashcardLayout.addWidget(self.editors[i], row, col)
 
@@ -107,8 +107,8 @@ class FlashcardsWindow(QMainWindow):
 
     def _createFlashcardPreview(self) -> None:
         layout = QHBoxLayout()
-        frontFlashcard = FlashcardPreview("Front")
-        backFlashcard = FlashcardPreview("Back")
+        frontFlashcard = self._withRefresh(FlashcardPreview)("Front")
+        backFlashcard = self._withRefresh(FlashcardPreview)("Back")
         self.flashcardPreviews = [frontFlashcard, backFlashcard]
         for preview in self.flashcardPreviews:
             layout.addWidget(preview)
@@ -117,10 +117,10 @@ class FlashcardsWindow(QMainWindow):
 
     def _createFlashcardNavToolbar(self) -> None:
         flashcardNavBar = QHBoxLayout()
-        self.flashcardNumDisplay = QLabel()
+        self.flashcardNumDisplay = self._withRefresh(QLabel)()
         self.previousFlashcardButton = QPushButton()
         self.previousFlashcardButton.setText("Previous")
-        self.currentFlashcardIndex = QLabel()
+        self.currentFlashcardIndex = self._withRefresh(QLabel)()
         self.currentFlashcardIndex.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.currentFlashcardIndex.setMaximumWidth(40)
         self.nextFlashcardButton = QPushButton()
