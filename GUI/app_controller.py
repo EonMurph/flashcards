@@ -20,9 +20,9 @@ class Flashcards:
         self._onLoad()
         self._connectSignalsAndSlots()
 
-    def _generateFieldsArg(self, editors: list[FlashcardEditor]) -> dict[str, str]:
+    def _generateFields(self, editors: list[FlashcardEditor]) -> dict[str, str]:
         """
-        This method is to be called only within call to the self._renderPreview attribute.
+        This method is to be called only within a call to the self._renderPreview attribute.
         This method is for generating the fields argument used in the model.renderPreview method.
         """
         editorsText: list[str] = [editor.textEditor.toPlainText() for editor in editors]
@@ -115,7 +115,7 @@ class Flashcards:
         This method is for changing the current template of a flashcardPreview.
         """
         self.model.setCurrentTemplate(templateName=self.model.templateNames[index])
-        self._renderPreview(fields=self._generateFieldsArg(editors=self.view.editors))
+        self._renderPreview(fields=self._generateFields(editors=self.view.editors))
 
     def _changeModel(self, index: int) -> None:
         """
