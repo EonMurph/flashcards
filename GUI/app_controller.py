@@ -143,6 +143,14 @@ class Flashcards:
         self._setCurrentFlashcardIndexText()
         self._refreshFlashcard()
 
+    def _connectTextEditors(self) -> None:
+        """
+        This method is to be called whenever the field text editors are (re)built.
+        This method connects all the field text editors to the _saveFields method.
+        """
+        for editor in self.view.editors:
+            editor.textEditor.textChanged.connect(lambda: self._saveFields())
+
     def _connectSignalsAndSlots(self) -> None:
         """
         This method is to only be called upon initialisation of the controller class.
@@ -153,12 +161,7 @@ class Flashcards:
             lambda: self._deleteFlashcard(self.model.currentFlashcard)
         )
 
-        for editor in self.view.editors:
-            editor.textEditor.textChanged.connect(
-                lambda: self._renderPreview(
-                    fields=self._generateFieldsArg(editors=self.view.editors)
-                )
-            )
+        self._connectTextEditors()
 
         self.view.flashcardTemplateSelector.currentIndexChanged.connect(
             lambda i: self._changeTemplate(index=i)
