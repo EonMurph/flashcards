@@ -91,7 +91,7 @@ class FlashcardOperations:
 
     def createFlashcard(self) -> None:
         defaultModel = self.model.models["Default Model"]
-        self.model.currentDeck.add_note(Note(model=defaultModel, fields=["", ""]))
+        self.model.currentDeck.add_note(Note(model=defaultModel, fields=[]))
         self.model.numFlashcards += 1
         self.model.flashcardChangesStatus += 1
         self.model.setFlashcardData(self.model.numFlashcards - 1)
