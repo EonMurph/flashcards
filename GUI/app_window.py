@@ -29,6 +29,22 @@ class FlashcardsWindow(QMainWindow):
         self.setCentralWidget(centralWidget)
         self._createDisplay(decks, initialNote)
 
+    @staticmethod
+    def _withRefresh(widget):
+        class RefreshableWidget(widget):
+            def __init__(self, *args, **kwargs) -> None:
+                super().__init__(*args, **kwargs)
+                self.dirty = False
+
+            def makeDirty(self) -> None:
+                self.dirty = True
+
+            def refresh(self) -> None:
+                print(self.dirty)
+                self.dirty = False
+
+        return RefreshableWidget
+
     def _createDisplay(self, decks: dict[str, Deck], initialNote: Note) -> None:
         class QHLine(QFrame):
             def __init__(self) -> None:
