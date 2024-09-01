@@ -61,12 +61,12 @@ class Flashcards:
             f"Flashcards in deck: {self.model.numFlashcards}({'+-'[self.model.flashcardChangesStatus < 0] + str(abs(self.model.flashcardChangesStatus))})"
         )
 
-    def _setCurrentFlashcardIndexText(self) -> None:
+    def _setCurrentFlashcardIndexDisplayText(self) -> None:
         """
         This method is to be called on initialisation of the controller class, or when either the index of the current flashcard changed or the number of flashcards in the deck changed.
         This method is for setting the text for the QLabel displaying the current flashcard's index out of the total number of flashcards in the deck.
         """
-        self.view.currentFlashcardIndex.setText(
+        self.view.currentFlashcardIndexDisplay.setText(
             f"{self.model.currentFlashcardIndex + 1}/{self.model.numFlashcards}"
         )
 
@@ -77,13 +77,21 @@ class Flashcards:
         """
         self.view.refreshFlashcardEditor(self.model.currentFlashcard)
         self._setTemplateNamesItems()
-        self._setCurrentFlashcardIndexText()
+        self._setCurrentFlashcardIndexDisplayText()
         self.view.flashcardModelSelector.setCurrentIndex(
             self.view.flashcardModelSelector.findText(
                 self.model.currentFlashcard.model.name
             )
         )
         self._renderPreview(fields=self._generateFields(editors=self.view.editors))
+
+    def _refreshFlashcardEditor(self, note: Note) -> None:
+        """
+        This method is to be called when refreshing the flashcard field editors.
+        This methods rebuilds and then reconnects the new flashcard editors to their signals.
+        """
+        self.view.refreshFlashcardEditor(note=note)
+        self._connectTextEditors()
 
     def _onManipulatingDeck(self) -> None:
         self._setFlashcardNumDisplayText()
@@ -137,6 +145,27 @@ class Flashcards:
         self.model.flashcardOperations.deleteFlashcard(flashcard=flashcard)
         self._onManipulatingDeck()
 
+    def _setRefreshMethods(self) -> None:
+        self.view.deckSelector.refresh = lambda index: self._changeDeck(index=index)
+        self.view.flashcardModelSelector.refresh = lambda index: self._changeModel(
+            index=index
+        )
+        self.view.flashcardTemplateSelector.refresh = (
+            lambda index: self._changeTemplate(index=index)
+        )
+        for editor in self.view.editors:
+            editor.refresh = lambda note: self._refreshFlashcardEditor(note)
+        for preview in self.view.flashcardPreviews:
+            preview.refresh = lambda editors: self._renderPreview(
+                fields=self._generateFields(editors)
+            )
+        self.view.flashcardNumDisplay.refresh = (
+            lambda: self._setFlashcardNumDisplayText()
+        )
+        self.view.currentFlashcardIndexDisplay.refresh = (
+            lambda: self._setCurrentFlashcardIndexDisplayText()
+        )
+
     def _onLoad(self) -> None:
         """
         This method is to only be called upon initialisation of the controller class.
@@ -144,8 +173,9 @@ class Flashcards:
         """
         self._setModelNamesItems()
         self._setFlashcardNumDisplayText()
-        self._setCurrentFlashcardIndexText()
+        self._setCurrentFlashcardIndexDisplayText()
         self._refreshFlashcard()
+        self._setRefreshMethods()
 
     def _connectTextEditors(self) -> None:
         """

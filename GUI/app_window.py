@@ -91,7 +91,7 @@ class FlashcardsWindow(QMainWindow):
 
         maxColumns = 2
         numFields = len(note.model.fields)
-        self.editors: list[FlashcardEditor] = []
+        self.editors = []
         fieldNames: list[str] = [fieldName["name"] for fieldName in note.model.fields]
         for i in range(numFields):
             row = i // maxColumns
@@ -122,14 +122,14 @@ class FlashcardsWindow(QMainWindow):
         self.flashcardNumDisplay = self._withRefresh(QLabel)()
         self.previousFlashcardButton = QPushButton()
         self.previousFlashcardButton.setText("Previous")
-        self.currentFlashcardIndex = self._withRefresh(QLabel)()
-        self.currentFlashcardIndex.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.currentFlashcardIndex.setMaximumWidth(40)
+        self.currentFlashcardIndexDisplay = self._withRefresh(QLabel)()
+        self.currentFlashcardIndexDisplay.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.currentFlashcardIndexDisplay.setMaximumWidth(40)
         self.nextFlashcardButton = QPushButton()
         self.nextFlashcardButton.setText("Next")
 
         flashcardNavBar.addWidget(self.flashcardNumDisplay)
         flashcardNavBar.addWidget(self.previousFlashcardButton)
-        flashcardNavBar.addWidget(self.currentFlashcardIndex)
+        flashcardNavBar.addWidget(self.currentFlashcardIndexDisplay)
         flashcardNavBar.addWidget(self.nextFlashcardButton)
         self.generalLayout.addLayout(flashcardNavBar)
