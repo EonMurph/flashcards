@@ -32,6 +32,8 @@ class FlashcardsWindow(QMainWindow):
 
     @staticmethod
     def _withRefresh(widget):
+        """This method is for adding refresh capabilities to QWidgets."""
+
         class RefreshableWidget(widget):
             def __init__(self, *args, **kwargs) -> None:
                 super().__init__(*args, **kwargs)
