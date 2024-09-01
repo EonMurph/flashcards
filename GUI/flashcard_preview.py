@@ -18,8 +18,8 @@ class FlashcardPreview(QWidget):
 
         previewLabel = QLabel()
         previewLabel.setText(view)
-        previewLabel.setStyleSheet("font-size: 15pt;")
-        previewLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        previewLabel.setStyleSheet("font-size: 15pt; margin: 0px 10px")
+        previewLabel.setAlignment(Qt.AlignmentFlag.AlignLeft if view == "Front" else Qt.AlignmentFlag.AlignRight)
         self.flashcardPreview = QTextEdit()
         self.flashcardPreview.setReadOnly(True)
 
