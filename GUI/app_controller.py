@@ -11,11 +11,7 @@ class Flashcards:
     def __init__(self, view: FlashcardsWindow, model: FlashcardsModel) -> None:
         self.view = view
         self.model = model
-
-        self._renderPreview = partial(
-            self.model.textOperations.renderPreview,
-            previews=self.view.flashcardPreviews,
-        )
+        self.refreshOperations = RefreshOperations(self)
 
         self._onLoad()
         self._connectSignalsAndSlots()
@@ -54,7 +50,7 @@ class Flashcards:
 
     def _setFlashcardNumDisplayText(self) -> None:
         """
-        This method is to be called on initialisation of the controller class, or when refreshing the flashcard, whether by creation, deletion or deck changing.
+        This method is to be called on initialisation of the controller class, or when the UI component's refresh method gets called.
         This method is for setting the text for the QLabel displaying the number of flashcards in the deck and the changes status of the deck.
         """
         self.view.flashcardNumDisplay.setText(
@@ -63,7 +59,7 @@ class Flashcards:
 
     def _setCurrentFlashcardIndexDisplayText(self) -> None:
         """
-        This method is to be called on initialisation of the controller class, or when either the index of the current flashcard changed or the number of flashcards in the deck changed.
+        This method is to be called on initialisation of the controller class, or when the UI component's refresh method get's called.
         This method is for setting the text for the QLabel displaying the current flashcard's index out of the total number of flashcards in the deck.
         """
         self.view.currentFlashcardIndexDisplay.setText(
@@ -146,24 +142,21 @@ class Flashcards:
         self._onManipulatingDeck()
 
     def _setRefreshMethods(self) -> None:
-        self.view.deckSelector.refresh = lambda index: self._changeDeck(index=index)
-        self.view.flashcardModelSelector.refresh = lambda index: self._changeModel(
-            index=index
+        self.view.flashcardModelSelector.refresh = (
+            lambda: self.refreshOperations._flashcardModelSelectorRefresh()
         )
         self.view.flashcardTemplateSelector.refresh = (
-            lambda index: self._changeTemplate(index=index)
+            lambda: self.refreshOperations._flashcardTemplateSelectorRefresh()
         )
         for editor in self.view.editors:
-            editor.refresh = lambda note: self._refreshFlashcardEditor(note)
+            editor.refresh = lambda: self.refreshOperations._flashcardEditorRefresh()
         for preview in self.view.flashcardPreviews:
-            preview.refresh = lambda editors: self._renderPreview(
-                fields=self._generateFields(editors)
-            )
+            preview.refresh = lambda: self.refreshOperations._flashcardPreviewRefresh()
         self.view.flashcardNumDisplay.refresh = (
-            lambda: self._setFlashcardNumDisplayText()
+            lambda: self.refreshOperations._flashcardNumDisplayTextRefresh()
         )
         self.view.currentFlashcardIndexDisplay.refresh = (
-            lambda: self._setCurrentFlashcardIndexDisplayText()
+            lambda: self.refreshOperations._currentFlashcardIndexDisplayTextRefresh()
         )
 
     def _onLoad(self) -> None:
@@ -213,3 +206,61 @@ class Flashcards:
         self.view.nextFlashcardButton.clicked.connect(
             lambda: self._changeFlashcard(indexDifference=1)
         )
+
+
+class RefreshOperations:
+    def __init__(self, controller: Flashcards) -> None:
+        self.controller = controller
+
+    def _flashcardModelSelectorRefresh(self) -> None:
+        """
+        This method is to be called when the current flashcard is changed, whether by creation, deletion, deck change, or flashcard navigation.
+        This method refreshes the flashcard model selector QComboBox to display the correct current flashcard model and related data.
+        """
+        flashcardModel = self.controller.view.flashcardModelSelector.currentData()
+        self.controller.model.setCurrentFlashcardModel(
+            self.controller.model.flashcardModels[flashcardModel]
+        )
+
+    def _flashcardTemplateSelectorRefresh(self) -> None:
+        """
+        This method is to be called when the current model is changed and when the current flashcard is changed, whether by creation, deletion, deck change, or flashcard navigation.
+        This method refreshes the flashcard template selector QComboBox to display the correct flashcard template and related data.
+        """
+        flashcardTemplate = self.controller.view.flashcardTemplateSelector.currentData()
+        self.controller.model.setCurrentTemplate(
+            templateName=self.controller.model.templates[flashcardTemplate]
+        )
+
+    def _flashcardEditorRefresh(self) -> None:
+        """
+        This method is to be called when the current model is changed and when the current flashcard is changed, whether by creation, deletion, deck change, or flashcard navigation.
+        This method rebuilds and then reconnects the new flashcard editors to their signals.
+        """
+        self.controller.view.refreshFlashcardEditor(
+            self.controller.model.currentFlashcard
+        )
+        self.controller._connectTextEditors()
+
+    def _flashcardPreviewRefresh(self) -> None:
+        """
+        This method is to be called on flashcard, field data, template, model, or deck change.
+        This method refreshes the flashcard previews.
+        """
+        self.controller._renderPreview(
+            fields=self.controller._generateFields(self.controller.view.editors)
+        )
+
+    def _flashcardNumDisplayTextRefresh(self) -> None:
+        """
+        This method is to be called when changing the number of flashcards, whether by creation, deletion or deck changing.
+        This method calls a method that sets the text for a QLabel widget.
+        """
+        self.controller._setFlashcardNumDisplayText()
+
+    def _currentFlashcardIndexDisplayTextRefresh(self) -> None:
+        """
+        This method is to be called when the current flashcard index changes, whether by creation, deletion, navigation or deck change.
+        This methods calls a method that sets the text for a QLabel widget.
+        """
+        self.controller._setCurrentFlashcardIndexDisplayText()
