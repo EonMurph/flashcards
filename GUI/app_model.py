@@ -9,8 +9,8 @@ class FlashcardsModel:
         self.textOperations = TextOperations(self)
         self.flashcardOperations = FlashcardOperations(self)
         self.decks = decks
-        self.models = models
-        self.modelNames: list[str] = [model for model in self.models]
+        self.flashcardModels = models
+        self.flashcardModelNames: list[str] = [model for model in self.flashcardModels]
         self.setDeckData()
 
     def setDeckData(self, deck: str = "cs2208", flashcardIndex: int = 0) -> None:
@@ -33,7 +33,7 @@ class FlashcardsModel:
             flashcardIndex = 0
         self.currentFlashcard: Note = self.currentDeck.notes[flashcardIndex]
         self.currentFlashcardIndex: int = flashcardIndex
-        self.setCurrentModel(self.currentFlashcard.model)
+        self.setCurrentFlashcardModel(self.currentFlashcard.model)
 
     def setTemplatesData(self) -> None:
         """
@@ -54,13 +54,13 @@ class FlashcardsModel:
                 self.currentTemplate = template
                 return None
 
-    def setCurrentModel(self, modelArg: str | Model) -> None:
+    def setCurrentFlashcardModel(self, modelArg: str | Model) -> None:
         """
-        This method is to be called up a change a flashcard or to be connected to the model QComboBox's indexChanged signal.
+        This method is to be called on a change of flashcard or to be connected to the flashcard model QComboBox's indexChanged signal.
         """
-        for model in self.models:
-            if modelArg in [model, self.models[model]]:
-                self.currentFlashcard.model = self.models[model]
+        for model in self.flashcardModels:
+            if modelArg in [model, self.flashcardModels[model]]:
+                self.currentFlashcard.model = self.flashcardModels[model]
                 self.setTemplatesData()
                 return None
 
@@ -91,7 +91,7 @@ class FlashcardOperations:
         self.model = model
 
     def createFlashcard(self) -> None:
-        defaultModel = self.model.models["Default Model"]
+        defaultModel = self.model.flashcardModels["Default Model"]
         self.model.currentDeck.add_note(Note(model=defaultModel, fields=[]))
         self.model.numFlashcards += 1
         self.model.flashcardChangesStatus += 1

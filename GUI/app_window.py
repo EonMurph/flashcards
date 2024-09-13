@@ -1,4 +1,3 @@
-from typing import Callable
 from genanki import Note, Deck
 from GUI.flashcard_editor import FlashcardEditor
 from GUI.flashcard_preview import FlashcardPreview
@@ -31,10 +30,10 @@ class FlashcardsWindow(QMainWindow):
         self._createDisplay(decks, initialNote)
 
     @staticmethod
-    def _withRefresh(widget):
+    def _withRefresh(widget_cls):
         """This method is for adding refresh capabilities to QWidgets."""
 
-        class RefreshableWidget(widget):
+        class RefreshableWidget(widget_cls):
             def __init__(self, *args, **kwargs) -> None:
                 super().__init__(*args, **kwargs)
                 self.dirty = False
@@ -63,7 +62,7 @@ class FlashcardsWindow(QMainWindow):
 
     def _createFlashcardToolbar(self, decks: dict[str, Deck]) -> None:
         layout = QHBoxLayout()
-        self.deckSelector = self._withRefresh(QComboBox)()
+        self.deckSelector = QComboBox()
         self.deckSelector.addItems([deck.upper() for deck in decks])
         self.flashcardModelSelector = self._withRefresh(QComboBox)()
         self.flashcardTemplateSelector = self._withRefresh(QComboBox)()

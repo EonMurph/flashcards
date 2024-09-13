@@ -2,7 +2,6 @@ from genanki import Note
 from GUI.app_model import FlashcardsModel
 from GUI.app_window import FlashcardsWindow
 from GUI.flashcard_editor import FlashcardEditor
-from functools import partial
 
 
 class Flashcards:
@@ -46,7 +45,7 @@ class Flashcards:
         This method is for setting the model QComboBox selectors items.
         """
         self.view.flashcardModelSelector.clear()
-        self.view.flashcardModelSelector.addItems(self.model.modelNames)
+        self.view.flashcardModelSelector.addItems(self.model.flashcardModelNames)
 
     def _setFlashcardNumDisplayText(self) -> None:
         """
@@ -108,7 +107,9 @@ class Flashcards:
         """
         self.model.flashcardOperations.changeFlashcard(indexDifference=indexDifference)
         self._changeModel(
-            index=self.model.modelNames.index(self.model.currentFlashcard.model.name)
+            index=self.model.flashcardModelNames.index(
+                self.model.currentFlashcard.model.name
+            )
         )
         self.view.flashcardModelSelector.setCurrentIndex(
             self.view.flashcardModelSelector.findText(
@@ -130,7 +131,9 @@ class Flashcards:
         This method is to be connected to the indexChanged signal of the model QComboBox.
         This method is for changing the current model of a flashcard.
         """
-        self.model.setCurrentModel(modelArg=self.model.modelNames[index])
+        self.model.setCurrentFlashcardModel(
+            modelArg=self.model.flashcardModelNames[index]
+        )
         self._refreshFlashcard()
 
     def _createFlashcard(self) -> None:
