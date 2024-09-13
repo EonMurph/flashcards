@@ -15,12 +15,12 @@ class Flashcards:
         self._onLoad()
         self._connectSignalsAndSlots()
 
-    def _generateFields(self, editors: list[FlashcardEditor]) -> dict[str, str]:
+    def _generateFields(self, editors: dict) -> dict[str, str]:
         """
         This method is to be called only within a call to the self._renderPreview attribute.
         This method is for generating the fields argument used in the model.renderPreview method.
         """
-        editorsText: list[str] = [editor.textEditor.toPlainText() for editor in editors]
+        editorsText: list[str] = [editors[fieldName].textEditor.toPlainText() for fieldName in editors]
         fields = {
             field[0]: field[1]
             for field in zip(
@@ -151,8 +151,8 @@ class Flashcards:
         self.view.flashcardTemplateSelector.refresh = (
             lambda: self.refreshOperations._flashcardTemplateSelectorRefresh()
         )
-        for editor in self.view.editors:
-            editor.refresh = lambda: self.refreshOperations._flashcardEditorRefresh()
+        for fieldName in self.view.editors:
+            self.view.editors[fieldName].refresh = lambda: self.refreshOperations._flashcardEditorRefresh()
         for preview in self.view.flashcardPreviews:
             preview.refresh = lambda: self.refreshOperations._flashcardPreviewRefresh()
         self.view.flashcardNumDisplay.refresh = (
@@ -178,8 +178,8 @@ class Flashcards:
         This method is to be called whenever the field text editors are (re)built.
         This method connects all the field text editors to the _saveFields method.
         """
-        for editor in self.view.editors:
-            editor.textEditor.textChanged.connect(lambda: self._saveFields())
+        for fieldName in self.view.editors:
+            self.view.editors[fieldName].textEditor.textChanged.connect(lambda: self._saveFields())
 
     def _connectSignalsAndSlots(self) -> None:
         """
