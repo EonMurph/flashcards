@@ -1,5 +1,5 @@
 from genanki import Deck, Note, Model
-from GUI.flashcard_preview import FlashcardPreview
+from .flashcard_preview import FlashcardPreview
 
 
 class FlashcardsModel:

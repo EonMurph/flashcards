@@ -1,3 +1,3 @@
-from GUI.app_controller import Flashcards
-from GUI.app_model import FlashcardsModel
-from GUI.app_window import FlashcardsWindow
+from .app_controller import Flashcards
+from .app_model import FlashcardsModel
+from .app_window import FlashcardsWindow

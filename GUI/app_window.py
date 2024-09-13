@@ -1,6 +1,6 @@
 from genanki import Note, Deck
-from GUI.flashcard_editor import FlashcardEditor
-from GUI.flashcard_preview import FlashcardPreview
+from .flashcard_editor import FlashcardEditor
+from .flashcard_preview import FlashcardPreview
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget,

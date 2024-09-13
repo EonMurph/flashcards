@@ -1,7 +1,7 @@
 from genanki import Note
-from GUI.app_model import FlashcardsModel
-from GUI.app_window import FlashcardsWindow
-from GUI.flashcard_editor import FlashcardEditor
+from .app_model import FlashcardsModel
+from .app_window import FlashcardsWindow
+from .flashcard_editor import FlashcardEditor
 
 
 class Flashcards:
