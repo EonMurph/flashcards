@@ -1,7 +1,7 @@
-from genanki import Note
 from .app_model import FlashcardsModel
 from .app_window import FlashcardsWindow
 from .flashcard_editor import FlashcardEditor
+from custom_note import CustomNote
 
 
 class Flashcards:
@@ -20,7 +20,9 @@ class Flashcards:
         This method is to be called only within a call to the self._renderPreview attribute.
         This method is for generating the fields argument used in the model.renderPreview method.
         """
-        editorsText: list[str] = [editors[fieldName].textEditor.toPlainText() for fieldName in editors]
+        editorsText: list[str] = [
+            editors[fieldName].textEditor.toPlainText() for fieldName in editors
+        ]
         fields = {
             field[0]: field[1]
             for field in zip(
@@ -80,7 +82,7 @@ class Flashcards:
         )
         self._renderPreview(fields=self._generateFields(editors=self.view.editors))
 
-    def _refreshFlashcardEditor(self, note: Note) -> None:
+    def _refreshFlashcardEditor(self, note: CustomNote) -> None:
         """
         This method is to be called when refreshing the flashcard field editors.
         This methods rebuilds and then reconnects the new flashcard editors to their signals.
@@ -140,7 +142,7 @@ class Flashcards:
         self.model.flashcardOperations.createFlashcard()
         self._onManipulatingDeck()
 
-    def _deleteFlashcard(self, flashcard: Note) -> None:
+    def _deleteFlashcard(self, flashcard: CustomNote) -> None:
         self.model.flashcardOperations.deleteFlashcard(flashcard=flashcard)
         self._onManipulatingDeck()
 
@@ -152,7 +154,9 @@ class Flashcards:
             lambda: self.refreshOperations._flashcardTemplateSelectorRefresh()
         )
         for fieldName in self.view.editors:
-            self.view.editors[fieldName].refresh = lambda: self.refreshOperations._flashcardEditorRefresh()
+            self.view.editors[fieldName].refresh = (
+                lambda: self.refreshOperations._flashcardEditorRefresh()
+            )
         for preview in self.view.flashcardPreviews:
             preview.refresh = lambda: self.refreshOperations._flashcardPreviewRefresh()
         self.view.flashcardNumDisplay.refresh = (
@@ -179,7 +183,9 @@ class Flashcards:
         This method connects all the field text editors to the _saveFields method.
         """
         for fieldName in self.view.editors:
-            self.view.editors[fieldName].textEditor.textChanged.connect(lambda: self._saveFields())
+            self.view.editors[fieldName].textEditor.textChanged.connect(
+                lambda: self._saveFields()
+            )
 
     def _connectSignalsAndSlots(self) -> None:
         """

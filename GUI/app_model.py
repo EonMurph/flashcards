@@ -1,4 +1,5 @@
-from genanki import Deck, Note, Model
+from genanki import Deck, Model
+from custom_note import CustomNote
 from .flashcard_preview import FlashcardPreview
 
 
@@ -31,7 +32,7 @@ class FlashcardsModel:
         """
         if self.numFlashcards <= flashcardIndex:
             flashcardIndex = 0
-        self.currentFlashcard: Note = self.currentDeck.notes[flashcardIndex]
+        self.currentFlashcard: CustomNote = self.currentDeck.notes[flashcardIndex]
         self.currentFlashcardIndex: int = flashcardIndex
         self.setCurrentFlashcardModel(self.currentFlashcard.model)
 
@@ -92,12 +93,12 @@ class FlashcardOperations:
 
     def createFlashcard(self) -> None:
         defaultModel = self.model.flashcardModels["Default Model"]
-        self.model.currentDeck.add_note(Note(model=defaultModel, fields=[]))
+        self.model.currentDeck.add_note(CustomNote(model=defaultModel, fields=[]))
         self.model.numFlashcards += 1
         self.model.flashcardChangesStatus += 1
         self.model.setFlashcardData(self.model.numFlashcards - 1)
 
-    def deleteFlashcard(self, flashcard: Note) -> None:
+    def deleteFlashcard(self, flashcard: CustomNote) -> None:
         self.model.currentDeck.notes.remove(flashcard)
         self.model.numFlashcards -= 1
         self.model.flashcardChangesStatus -= 1

@@ -1,4 +1,5 @@
-from genanki import Note, Deck
+from genanki import Deck
+from custom_note import CustomNote
 from .flashcard_editor import FlashcardEditor
 from .flashcard_preview import FlashcardPreview
 from PySide6.QtCore import Qt
@@ -18,7 +19,7 @@ from PySide6.QtWidgets import (
 class FlashcardsWindow(QMainWindow):
     """Window or view class for the Flashcards app."""
 
-    def __init__(self, decks: dict[str, Deck], initialNote: Note) -> None:
+    def __init__(self, decks: dict[str, Deck], initialNote: CustomNote) -> None:
         super().__init__()
         self.setWindowTitle("Flashcards")
         self.setGeometry(50, 100, 800, 800)
@@ -46,7 +47,7 @@ class FlashcardsWindow(QMainWindow):
 
         return RefreshableWidget
 
-    def _createDisplay(self, decks: dict[str, Deck], initialNote: Note) -> None:
+    def _createDisplay(self, decks: dict[str, Deck], initialNote: CustomNote) -> None:
         class QHLine(QFrame):
             def __init__(self) -> None:
                 super(QHLine, self).__init__()
@@ -77,14 +78,14 @@ class FlashcardsWindow(QMainWindow):
         layout.addWidget(self.flashcardDeleter)
         self.generalLayout.addLayout(layout)
 
-    def refreshFlashcardEditor(self, note: Note) -> None:
+    def refreshFlashcardEditor(self, note: CustomNote) -> None:
         while self.flashcardLayout.count():
             child = self.flashcardLayout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
         self._createFlashcardEditor(note, refresh=True)
 
-    def _createFlashcardEditor(self, note: Note, refresh: bool = False) -> None:
+    def _createFlashcardEditor(self, note: CustomNote, refresh: bool = False) -> None:
         if not refresh:
             self.flashcardLayout = QGridLayout()
 
@@ -96,7 +97,7 @@ class FlashcardsWindow(QMainWindow):
             row = i // maxColumns
             col = i % maxColumns
             try:
-                fieldData: str = note.fields[i]
+                fieldData: str = note.fieldData[i]
             except IndexError:
                 fieldData = ""
             editor = self._withRefresh(FlashcardEditor)(row, fieldNames[i], fieldData)
