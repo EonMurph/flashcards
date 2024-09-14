@@ -53,17 +53,16 @@ class FlashcardsModel:
         for template in self.templates:
             if template["name"] == templateName:
                 self.currentTemplate = template
-                return None
 
     def setCurrentFlashcardModel(self, modelArg: str | Model) -> None:
         """
         This method is to be called on a change of flashcard or to be connected to the flashcard model QComboBox's indexChanged signal.
         """
-        for model in self.flashcardModels:
-            if modelArg in [model, self.flashcardModels[model]]:
-                self.currentFlashcard.model = self.flashcardModels[model]
-                self.setTemplatesData()
-                return None
+        if modelArg in self.flashcardModelNames:
+            self.currentFlashcard.model = self.flashcardModels[modelArg]
+        elif modelArg in self.flashcardModels.values():
+            self.currentFlashcard.model = modelArg
+        self.setTemplatesData()
 
 
 class TextOperations:
