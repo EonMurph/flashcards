@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QTextEdit
 from PySide6.QtCore import Qt
+from .custom_widgets import WidgetWithRefresh
 
 
-class FlashcardPreview(QWidget):
+class FlashcardPreview(QWidget, WidgetWithRefresh):
     """Custom widget for the flashcard preview UI component."""
 
     def __init__(self, view: str):

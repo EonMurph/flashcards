@@ -15,7 +15,7 @@ class Flashcards:
         self._onLoad()
         self._connectSignalsAndSlots()
 
-    def _generateFields(self, editors: dict) -> dict[str, str]:
+    def _generateFields(self, editors: dict[str, FlashcardEditor]) -> dict[str, str]:
         """
         This method is to be called only within a call to the self._renderPreview attribute.
         This method is for generating the fields argument used in the model.renderPreview method.
@@ -147,22 +147,24 @@ class Flashcards:
         self._onManipulatingDeck()
 
     def _setRefreshMethods(self) -> None:
-        self.view.flashcardModelSelector.refresh = (
+        self.view.flashcardModelSelector.refreshMethod = (
             lambda: self.refreshOperations._flashcardModelSelectorRefresh()
         )
-        self.view.flashcardTemplateSelector.refresh = (
+        self.view.flashcardTemplateSelector.refreshMethod = (
             lambda: self.refreshOperations._flashcardTemplateSelectorRefresh()
         )
         for fieldName in self.view.editors:
-            self.view.editors[fieldName].refresh = (
+            self.view.editors[fieldName].refreshMethod = (
                 lambda: self.refreshOperations._flashcardEditorRefresh()
             )
         for preview in self.view.flashcardPreviews:
-            preview.refresh = lambda: self.refreshOperations._flashcardPreviewRefresh()
-        self.view.flashcardNumDisplay.refresh = (
+            preview.refreshMethod = (
+                lambda: self.refreshOperations._flashcardPreviewRefresh()
+            )
+        self.view.flashcardNumDisplay.refreshMethod = (
             lambda: self.refreshOperations._flashcardNumDisplayTextRefresh()
         )
-        self.view.currentFlashcardIndexDisplay.refresh = (
+        self.view.currentFlashcardIndexDisplay.refreshMethod = (
             lambda: self.refreshOperations._currentFlashcardIndexDisplayTextRefresh()
         )
 

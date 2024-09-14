@@ -2,6 +2,7 @@ from genanki import Deck
 from data import CustomNote
 from .flashcard_editor import FlashcardEditor
 from .flashcard_preview import FlashcardPreview
+from .custom_widgets import RefreshableQComboBox, RefreshableQLabel
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QWidget,
@@ -11,7 +12,6 @@ from PySide6.QtWidgets import (
     QComboBox,
     QPushButton,
     QGridLayout,
-    QLabel,
     QFrame,
 )
 
@@ -29,23 +29,6 @@ class FlashcardsWindow(QMainWindow):
         centralWidget.setLayout(self.generalLayout)
         self.setCentralWidget(centralWidget)
         self._createDisplay(decks, initialNote)
-
-    @staticmethod
-    def _withRefresh(widget_cls):
-        """This method is for adding refresh capabilities to QWidgets."""
-
-        class RefreshableWidget(widget_cls):
-            def __init__(self, *args, **kwargs) -> None:
-                super().__init__(*args, **kwargs)
-                self.dirty = False
-
-            def makeDirty(self) -> None:
-                self.dirty = True
-
-            def refresh(self) -> None:
-                print("Refresh not yet implemented")
-
-        return RefreshableWidget
 
     def _createDisplay(self, decks: dict[str, Deck], initialNote: CustomNote) -> None:
         class QHLine(QFrame):
@@ -65,8 +48,8 @@ class FlashcardsWindow(QMainWindow):
         layout = QHBoxLayout()
         self.deckSelector = QComboBox()
         self.deckSelector.addItems([deck.upper() for deck in decks])
-        self.flashcardModelSelector = self._withRefresh(QComboBox)()
-        self.flashcardTemplateSelector = self._withRefresh(QComboBox)()
+        self.flashcardModelSelector = RefreshableQComboBox()
+        self.flashcardTemplateSelector = RefreshableQComboBox()
         self.flashcardCreator = QPushButton()
         self.flashcardCreator.setText("&Create")
         self.flashcardDeleter = QPushButton()
@@ -91,7 +74,7 @@ class FlashcardsWindow(QMainWindow):
 
         maxColumns = 2
         numFields = len(note.model.fields)
-        self.editors = {}
+        self.editors: dict[str, FlashcardEditor] = {}
         fieldNames: list[str] = [fieldName["name"] for fieldName in note.model.fields]
         for i in range(numFields):
             row = i // maxColumns
@@ -100,7 +83,7 @@ class FlashcardsWindow(QMainWindow):
                 fieldData: str = note.fields[i]
             except IndexError:
                 fieldData = ""
-            editor = self._withRefresh(FlashcardEditor)(row, fieldNames[i], fieldData)
+            editor = FlashcardEditor(row, fieldNames[i], fieldData)
             self.editors[fieldNames[i]] = editor
             self.flashcardLayout.addWidget(self.editors[fieldNames[i]], row, col)
 
@@ -109,8 +92,8 @@ class FlashcardsWindow(QMainWindow):
 
     def _createFlashcardPreview(self) -> None:
         layout = QHBoxLayout()
-        frontFlashcard = self._withRefresh(FlashcardPreview)("Front")
-        backFlashcard = self._withRefresh(FlashcardPreview)("Back")
+        frontFlashcard = FlashcardPreview("Front")
+        backFlashcard = FlashcardPreview("Back")
         self.flashcardPreviews = [frontFlashcard, backFlashcard]
         for preview in self.flashcardPreviews:
             layout.addWidget(preview)
@@ -119,10 +102,10 @@ class FlashcardsWindow(QMainWindow):
 
     def _createFlashcardNavToolbar(self) -> None:
         flashcardNavBar = QHBoxLayout()
-        self.flashcardNumDisplay = self._withRefresh(QLabel)()
+        self.flashcardNumDisplay = RefreshableQLabel()
         self.previousFlashcardButton = QPushButton()
         self.previousFlashcardButton.setText("Previous")
-        self.currentFlashcardIndexDisplay = self._withRefresh(QLabel)()
+        self.currentFlashcardIndexDisplay = RefreshableQLabel()
         self.currentFlashcardIndexDisplay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.currentFlashcardIndexDisplay.setMaximumWidth(40)
         self.nextFlashcardButton = QPushButton()

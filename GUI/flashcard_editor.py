@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import QTextEdit, QWidget, QVBoxLayout, QLabel
+from .custom_widgets import WidgetWithRefresh
 
 
-class FlashcardEditor(QWidget):
+class FlashcardEditor(QWidget, WidgetWithRefresh):
     """Custom widget for the flashcard editor UI component."""
 
     def __init__(self, row: int, fieldName: str, fieldData: str = ""):
