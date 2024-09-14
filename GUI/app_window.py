@@ -1,5 +1,5 @@
 from genanki import Deck
-from custom_note import CustomNote
+from data import CustomNote
 from .flashcard_editor import FlashcardEditor
 from .flashcard_preview import FlashcardPreview
 from PySide6.QtCore import Qt
@@ -97,7 +97,7 @@ class FlashcardsWindow(QMainWindow):
             row = i // maxColumns
             col = i % maxColumns
             try:
-                fieldData: str = note.fieldData[i]
+                fieldData: str = note.fields[i]
             except IndexError:
                 fieldData = ""
             editor = self._withRefresh(FlashcardEditor)(row, fieldNames[i], fieldData)

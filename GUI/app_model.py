@@ -1,5 +1,5 @@
 from genanki import Deck, Model
-from custom_note import CustomNote
+from data import CustomNote
 from .flashcard_preview import FlashcardPreview
 
 

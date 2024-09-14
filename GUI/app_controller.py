@@ -1,7 +1,7 @@
 from .app_model import FlashcardsModel
 from .app_window import FlashcardsWindow
 from .flashcard_editor import FlashcardEditor
-from custom_note import CustomNote
+from data.models.custom_note import CustomNote
 
 
 class Flashcards:
